@@ -16,8 +16,7 @@ public class EnrollmentBusinessTest extends LuteceTestCase {
     private static final int ID1 = 1;
     //private static final int ID2 = 2;
 
-    public void testBusiness( )
-    {
+    public void testBusiness( ) {
         Enrollment enrollment = new Enrollment();
         enrollment.setProgram( PROGRAM1 );
         enrollment.setName( NAME1 );
@@ -27,7 +26,7 @@ public class EnrollmentBusinessTest extends LuteceTestCase {
 
         //create test
         EnrollmentHome.create( enrollment );
-        Enrollment enrollmentStored = EnrollmentHome.findByPrimaryKey ( enrollment.getId());
+        Enrollment enrollmentStored = EnrollmentHome.findByPrimaryKey ( enrollment.getId() );
 
         assertEquals( enrollment.getProgram(), enrollmentStored.getProgram() );
         assertEquals( enrollment.getName(), enrollmentStored.getName() );
@@ -41,6 +40,7 @@ public class EnrollmentBusinessTest extends LuteceTestCase {
         enrollment.setPhone( PHONE2 );
 
         EnrollmentHome.update( enrollment );
+        enrollmentStored = EnrollmentHome.findByPrimaryKey ( enrollment.getId() );
         assertEquals( enrollment.getProgram(), enrollmentStored.getProgram() );
         assertEquals( enrollment.getName(), enrollmentStored.getName() );
         assertEquals( enrollment.getEmail(), enrollmentStored.getEmail() );
@@ -58,3 +58,4 @@ public class EnrollmentBusinessTest extends LuteceTestCase {
 
     }
 }
+
