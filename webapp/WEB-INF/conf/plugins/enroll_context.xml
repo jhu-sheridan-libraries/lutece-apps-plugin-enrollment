@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" >
+
+    <bean id="enroll.projectDAO" class="fr.paris.lutece.plugins.enroll.business.ProjectDAO" />
+    <bean id="enroll.enrollmentDAO" class="fr.paris.lutece.plugins.enroll.business.enrollment.EnrollmentDAO" />
+    <bean id="enroll.projectRest" class="fr.paris.lutece.plugins.enroll.rs.ProjectRest" />
+
+    <bean id="enroll.swaggerRest" class="fr.paris.lutece.plugins.enroll.rs.SwaggerRest" />
+
+    <bean id="enroll.EnrollPortletDAO" class="fr.paris.lutece.plugins.enroll.business.portlet.EnrollPortletDAO" />
+</beans>

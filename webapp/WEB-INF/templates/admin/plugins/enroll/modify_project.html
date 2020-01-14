@@ -1,0 +1,14 @@
+<#include "manageenroll_tabs.html" />
+<@tabs tab="project" />
+
+<@rowBoxHeader i18nTitleKey="enroll.modify_project.title">
+    <form class="form-horizontal" method="post" name="modify_project" action="jsp/admin/plugins/enroll/ManageProjects.jsp">
+        <@messages errors=errors />
+        <input type="hidden" id="id" name="id" value="${project.id}"/>
+
+        <@fieldInputText i18nLabelKey="enroll.modify_project.labelName" inputName="name" mandatory=true value="${project.name}" i18nHelpBlockKey="enroll.modify_project.labelName.help" />
+        <@fieldInputText i18nLabelKey="enroll.create_project.labelSize" inputName="size" mandatory=true value="${project.size!''}" i18nHelpBlockKey="enroll.create_project.labelSize.help" />
+
+        <@actionButtons button1Name="action_modifyProject" button2Name="view_manageProjects"/>
+    </form>
+</@rowBoxHeader>
