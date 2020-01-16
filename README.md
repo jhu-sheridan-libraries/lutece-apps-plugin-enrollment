@@ -1,7 +1,7 @@
-#lutece-enroll-plugin [plugin-enroll]
+# lutece-enroll-plugin [plugin-enroll]
 
 
-##Test
+## Test
 
 To run the tests, we need to spin up a mysql instance in a docker container. The following `docker-compose.yml` 
 accomplishes this: 
