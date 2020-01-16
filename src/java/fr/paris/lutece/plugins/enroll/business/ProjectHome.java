@@ -58,7 +58,7 @@ public final class ProjectHome
 
     /**
      * Create an instance of the project class
-     * @param project The instance of the Project which contains the informations to store
+     * @param project The instance of the Project which contains the information to store
      * @return The  instance of project which has been created with its primary key.
      */
     public static Project create( Project project )

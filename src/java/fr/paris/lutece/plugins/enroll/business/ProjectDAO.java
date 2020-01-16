@@ -91,7 +91,7 @@ public final class ProjectDAO implements IProjectDAO
         daoUtil.setString( nIndex++ , project.getName( ) );
         daoUtil.setInt( nIndex++ , project.getSize( ) );
         daoUtil.setInt( nIndex++ , project.getCurrentSize( ) );
-        daoUtil.setInt( nIndex++ , project.getActive( ) );
+        daoUtil.setInt( nIndex , project.getActive( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -117,7 +117,7 @@ public final class ProjectDAO implements IProjectDAO
             project.setName( daoUtil.getString( nIndex++ ) );
             project.setSize( daoUtil.getInt( nIndex++ ) );
             project.setCurrentSize( daoUtil.getInt( nIndex++ ));
-            project.setActive( daoUtil.getInt( nIndex++ ) );
+            project.setActive( daoUtil.getInt( nIndex ) );
         }
 
         daoUtil.free( );
@@ -162,7 +162,7 @@ public final class ProjectDAO implements IProjectDAO
     @Override
     public List<Project> selectProjectsList( Plugin plugin )
     {
-        List<Project> projectList = new ArrayList<Project>(  );
+        List<Project> projectList = new ArrayList<>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
         daoUtil.executeQuery(  );
 
@@ -175,7 +175,7 @@ public final class ProjectDAO implements IProjectDAO
             project.setName( daoUtil.getString( nIndex++ ) );
             project.setSize( daoUtil.getInt( nIndex++ ) );
             project.setCurrentSize ( daoUtil.getInt( nIndex++ ));
-            project.setActive( daoUtil.getInt( nIndex++ ) );
+            project.setActive( daoUtil.getInt( nIndex ) );
 
             projectList.add( project );
         }
@@ -190,7 +190,7 @@ public final class ProjectDAO implements IProjectDAO
     @Override
     public List<Integer> selectIdProjectsList( Plugin plugin )
     {
-        List<Integer> projectList = new ArrayList<Integer>( );
+        List<Integer> projectList = new ArrayList<>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
         daoUtil.executeQuery(  );
 

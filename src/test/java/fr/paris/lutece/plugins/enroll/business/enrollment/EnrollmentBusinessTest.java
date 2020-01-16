@@ -14,7 +14,6 @@ public class EnrollmentBusinessTest extends LuteceTestCase {
     private static final String PHONE1 = "410-867-5309";
     private static final String PHONE2 = "410-867-5310";
     private static final int ID1 = 1;
-    //private static final int ID2 = 2;
 
     public void testBusiness( ) {
         Enrollment enrollment = new Enrollment();
@@ -49,7 +48,7 @@ public class EnrollmentBusinessTest extends LuteceTestCase {
         //list test
         List<Enrollment> enrollmentsList = EnrollmentHome.getEnrollmentsList();
         assertEquals( 1, enrollmentsList.size() );
-        assertEquals( enrollment, enrollmentsList.get(0));
+        assertEquals( enrollment.getId(), enrollmentsList.get(0).getId());
 
         // Delete test
         EnrollmentHome.remove( enrollment.getId( ) );

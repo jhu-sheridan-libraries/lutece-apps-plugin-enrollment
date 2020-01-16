@@ -51,7 +51,7 @@ public class ProjectBusinessTest extends LuteceTestCase {
         //list test
         List<Project> projectsList = ProjectHome.getProjectsList();
         assertEquals( 1, projectsList.size() );
-        assertEquals( project, projectsList.get(0));
+        assertEquals( project.getId(), projectsList.get(0).getId());
 
         // Delete test
         ProjectHome.remove( project.getId( ) );
