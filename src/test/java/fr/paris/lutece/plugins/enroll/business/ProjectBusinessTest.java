@@ -1,5 +1,7 @@
 package fr.paris.lutece.plugins.enroll.business;
 
+import fr.paris.lutece.plugins.enroll.business.project.Project;
+import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.test.LuteceTestCase;
 
 import java.util.List;

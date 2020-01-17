@@ -3,11 +3,10 @@
   */
 package fr.paris.lutece.plugins.enroll.web;
 
-import fr.paris.lutece.plugins.enroll.business.Project;
-import fr.paris.lutece.plugins.enroll.business.ProjectHome;
+import fr.paris.lutece.plugins.enroll.business.project.Project;
+import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.plugins.enroll.business.enrollment.Enrollment;
 import fr.paris.lutece.plugins.enroll.business.enrollment.EnrollmentHome;
-import org.apache.commons.lang.StringUtils;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
@@ -20,10 +19,7 @@ import java.util.Collection;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
-import java.awt.datatransfer.*;
-import java.awt.Toolkit;
-
-/**
+ /**
  * This class provides the user interface to manage Project features ( manage, create, modify, remove )
  */
 @Controller( controllerJsp = "ManageProjects.jsp", controllerPath = "jsp/admin/plugins/enroll/", right = "ENROLL_MANAGEMENT" )
@@ -219,10 +215,10 @@ public class ProjectJspBean extends ManageEnrollJspBean
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
         String _projectName = ProjectHome.findByPrimaryKey(nId).getName();
         List<Enrollment> listEnrollments = EnrollmentHome.getEnrollmentsList(  );
-        for (int i = 0; i < listEnrollments.size(); i++) {
-          if (listEnrollments.get(i).getProgram().equals(_projectName)) {
-            EnrollmentHome.remove(listEnrollments.get(i).getId());
-          }
+        for (Enrollment listEnrollment : listEnrollments) {
+            if (listEnrollment.getProgram().equals(_projectName)) {
+                EnrollmentHome.remove(listEnrollment.getId());
+            }
         }
         ProjectHome.remove( nId );
         addInfo( INFO_PROJECT_REMOVED, getLocale(  ) );

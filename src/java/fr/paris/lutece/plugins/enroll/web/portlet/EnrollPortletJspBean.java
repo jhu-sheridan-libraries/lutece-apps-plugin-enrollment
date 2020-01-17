@@ -40,15 +40,8 @@ import fr.paris.lutece.portal.web.portlet.PortletJspBean;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import fr.paris.lutece.plugins.enroll.business.ProjectHome;
-import fr.paris.lutece.plugins.enroll.business.Project;
-import fr.paris.lutece.util.ReferenceList;
-import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
-import org.apache.commons.lang.StringUtils;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
 
 /**
  * This class provides the user interface to manage EnrollPortlet features
@@ -78,7 +71,7 @@ public class EnrollPortletJspBean extends PortletJspBean
         String strPageId = request.getParameter( PARAMETER_PAGE_ID );
         String strPortletTypeId = request.getParameter( PARAMETER_PORTLET_TYPE_ID );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         HtmlTemplate template = getCreateTemplate( strPageId, strPortletTypeId, model );
 
@@ -96,7 +89,7 @@ public class EnrollPortletJspBean extends PortletJspBean
         String strPortletId = request.getParameter( PARAMETER_PORTLET_ID );
         int nPortletId = Integer.parseInt( strPortletId );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         EnrollPortlet portlet = (EnrollPortlet) PortletHome.findByPrimaryKey( nPortletId );
         HtmlTemplate template = getModifyTemplate( portlet, model );
 

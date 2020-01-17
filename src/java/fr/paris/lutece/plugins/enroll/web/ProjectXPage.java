@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.enroll.web;
 
-import fr.paris.lutece.plugins.enroll.business.Project;
-import fr.paris.lutece.plugins.enroll.business.ProjectHome;
+import fr.paris.lutece.plugins.enroll.business.project.Project;
+import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.plugins.enroll.business.enrollment.Enrollment;
 import fr.paris.lutece.plugins.enroll.business.enrollment.EnrollmentHome;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
@@ -48,8 +48,6 @@ import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 
 import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
 import java.util.Locale;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import javax.servlet.http.HttpServletRequest;
@@ -200,7 +198,7 @@ public class ProjectXPage extends MVCApplication
      *
      * @param request The Http request
      * @return the html code to confirm
-     * @throws fr.paris.lutece.portal.service.message.SiteMessageException
+     * @throws SiteMessageException fr.paris.lutece.portal.service.message.SiteMessageException
      */
     @Action( ACTION_CONFIRM_REMOVE_PROJECT )
     public XPage getConfirmRemoveProject( HttpServletRequest request ) throws SiteMessageException

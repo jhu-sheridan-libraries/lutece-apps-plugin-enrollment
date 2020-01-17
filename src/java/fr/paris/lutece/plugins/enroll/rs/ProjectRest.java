@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.enroll.rs;
 
-import fr.paris.lutece.plugins.enroll.business.Project;
-import fr.paris.lutece.plugins.enroll.business.ProjectHome;
+import fr.paris.lutece.plugins.enroll.business.project.Project;
+import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.plugins.rest.service.RestConstants;
 import fr.paris.lutece.util.json.ErrorJsonResponse;
 import fr.paris.lutece.util.json.JsonResponse;
@@ -109,8 +109,9 @@ public class ProjectRest
      * Create Project
      * @param nVersion the API version
      * @param name the name
-     * @param email the email
-     * @param phone the phone
+     * @param size the maximimum size of the project
+     * @param currentsize the current size of the project
+     * @param active whether the project is inactive (0) or active (1)
      * @return the Project if created
      */
     @POST
@@ -139,8 +140,9 @@ public class ProjectRest
     /**
      * Create Project V1
      * @param name the name
-     * @param email the email
-     * @param phone the phone
+     * @param size the maximimum size of the project
+     * @param currentsize the current size of the project
+     * @param active whether the project is inactive (0) or active (1)
      * @return the Project if created for the version 1
      */
     private Response createProjectV1( String name, int size, int currentsize, int active )
@@ -170,8 +172,9 @@ public class ProjectRest
      * @param nVersion the API version
      * @param id the id
      * @param name the name
-     * @param email the email
-     * @param phone the phone
+     * @param size the maximimum size of the project
+     * @param currentsize the current size of the project
+     * @param active whether the project is inactive (0) or active (1)
      * @return the Project if modified
      */
     @PUT
@@ -202,8 +205,9 @@ public class ProjectRest
      * Modify Project V1
      * @param id the id
      * @param name the name
-     * @param email the email
-     * @param phone the phone
+     * @param size the maximimum size of the project
+     * @param currentsize the current size of the project
+     * @param active whether the project is inactive (0) or active (1)
      * @return the Project if modified for the version 1
      */
     private Response modifyProjectV1( Integer id, String name, int size, int currentsize, int active )

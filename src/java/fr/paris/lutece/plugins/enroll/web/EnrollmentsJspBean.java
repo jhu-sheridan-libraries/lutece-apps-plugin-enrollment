@@ -2,8 +2,8 @@ package fr.paris.lutece.plugins.enroll.web;
 
 import fr.paris.lutece.plugins.enroll.business.enrollment.Enrollment;
 import fr.paris.lutece.plugins.enroll.business.enrollment.EnrollmentHome;
-import fr.paris.lutece.plugins.enroll.business.Project;
-import fr.paris.lutece.plugins.enroll.business.ProjectHome;
+import fr.paris.lutece.plugins.enroll.business.project.Project;
+import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import fr.paris.lutece.util.ReferenceList;
 import java.util.Map;
-import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -89,7 +88,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
           }
         }
         List<Enrollment> listEnrollments = EnrollmentHome.getEnrollmentsList(  );
-        List<Enrollment> sortedEnrollments = new ArrayList<Enrollment>();
+        List<Enrollment> sortedEnrollments = new ArrayList<>();
         for (Enrollment enrollment : listEnrollments) {
           if (enrollment.getProgram().equals(_projectName)) {
             sortedEnrollments.add(enrollment);
@@ -231,7 +230,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
           }
         }
         List<Enrollment> listEnrollments = EnrollmentHome.getEnrollmentsList(  );
-        List<Enrollment> sortedEnrollments = new ArrayList<Enrollment>();
+        List<Enrollment> sortedEnrollments = new ArrayList<>();
         for (Enrollment enrollment : listEnrollments) {
           if (enrollment.getProgram().equals(_projectName)) {
             sortedEnrollments.add(enrollment);

@@ -2,19 +2,13 @@ package fr.paris.lutece.plugins.enroll.web;
 
 import fr.paris.lutece.plugins.enroll.business.enrollment.Enrollment;
 import fr.paris.lutece.plugins.enroll.business.enrollment.EnrollmentHome;
-import fr.paris.lutece.plugins.enroll.business.Project;
-import fr.paris.lutece.plugins.enroll.business.ProjectHome;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.plugins.enroll.business.project.Project;
+import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
-import fr.paris.lutece.util.url.UrlItem;
-import fr.paris.lutece.portal.service.message.SiteMessageService;
-import fr.paris.lutece.portal.service.message.SiteMessage;
-import fr.paris.lutece.portal.service.message.SiteMessageException;
 
 import java.util.Map;
 import java.util.List;
@@ -142,7 +136,7 @@ public class EnrollmentXPage extends MVCApplication {
             refListProjects.addItem( project.getId( ), project.getName( ) );
           }
       }
-      Map<String, Object> model = new HashMap<String, Object>( );
+      Map<String, Object> model = new HashMap<>( );
       model.put( MARK_LIST_PROJECTS, refListProjects );
 
       HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_ENROLLMENT, locale, model );
