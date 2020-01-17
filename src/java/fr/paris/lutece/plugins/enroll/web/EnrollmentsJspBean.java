@@ -19,15 +19,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * This class provides the user interface to manage Project features ( manage, create, modify, remove )
+ * This class provides the user interface to manage Enrollment features ( manage, create, modify, remove )
  */
 @Controller( controllerJsp = "ManageEnrollments.jsp", controllerPath = "jsp/admin/plugins/enroll/", right = "ENROLL_MANAGEMENT" )
 public class EnrollmentsJspBean extends ManageEnrollJspBean
 {
-    // Templates
+    // Template
     private static final String TEMPLATE_MANAGE_ENROLLMENTS="/skin/plugins/enroll/manage_enrollments.html";
     private static final String TEMPLATE_CREATE_ENROLLMENT="/skin/plugins/enroll/create_enrollment.html";
-    private static final String TEMPLATE_MODIFY_ENROLLMENT="/skin/plugins/enroll/modify_enrollment.html";
+    private static final String TEMPLATE_MODIFY_ENROLLMENT="/admin/plugins/enroll/modify_enrollment.html";
 
     // Parameters
     private static final String PARAMETER_ID_ENROLLMENT = "id";
@@ -239,5 +239,61 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
         Map<String, Object> model = getPaginatedListModel( request, MARK_ENROLLMENT_LIST, sortedEnrollments, JSP_MANAGE_ENROLLMENTS );
         model.put( MARK_PROJECT, projectId);
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_ENROLLMENTS, TEMPLATE_MANAGE_ENROLLMENTS, model );
+    }
+
+    /**
+     * Returns the form to update info about an enrollment
+     *
+     * @param request The Http request
+     * @return The HTML form to update info
+     */
+    @View( VIEW_MODIFY_ENROLLMENT )
+    public String getModifyEnrollment( HttpServletRequest request )
+    {
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ENROLLMENT ) );
+        //int projectId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
+        _enrollment = EnrollmentHome.findByPrimaryKey( nId );
+
+        Map<String, Object> model = getModel(  );
+        model.put( MARK_ENROLLMENT, _enrollment );
+        return getPage( PROPERTY_PAGE_TITLE_MODIFY_ENROLLMENT, TEMPLATE_MODIFY_ENROLLMENT, model );
+    }
+
+    /**
+     * Process the change form of an enrollment
+     *
+     * @param request The Http request
+     * @return The Jsp URL of the process result
+     */
+    @Action( ACTION_MODIFY_ENROLLMENT )
+    public String doModifyEnrollment( HttpServletRequest request )
+    {
+        _enrollment = new Enrollment();
+        populate( _enrollment, request );
+
+        // Check constraints
+        if ( !validateBean( _enrollment, VALIDATION_ATTRIBUTES_PREFIX ) )
+        {
+            return redirect( request, VIEW_MODIFY_ENROLLMENT, PARAMETER_ID_ENROLLMENT, _enrollment.getId( ) );
+        }
+
+        EnrollmentHome.update( _enrollment );
+
+        List<Project> listProjects = ProjectHome.getProjectsList();
+        for (Project project : listProjects) {
+            if (project.getName().equals(_enrollment.getProgram())) {
+                project.setCurrentSize(project.getCurrentSize()+1);
+                if (project.getSize() > 0) {
+                    if (project.getCurrentSize() == project.getSize() && project.getActive() == 1) {
+                        project.setActive(0);
+                    }
+                }
+                ProjectHome.update(project);
+            }
+        }
+
+        addInfo( INFO_ENROLLMENT_UPDATED, getLocale(  ) );
+
+        return redirectView( request, VIEW_MANAGE_ENROLLMENTS );
     }
 }

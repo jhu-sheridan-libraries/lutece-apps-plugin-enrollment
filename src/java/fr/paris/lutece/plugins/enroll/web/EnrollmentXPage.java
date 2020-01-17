@@ -142,4 +142,49 @@ public class EnrollmentXPage extends MVCApplication {
       HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_ENROLLMENT, locale, model );
       return template.getHtml( );
   }
+
+    /**
+     * Returns the form to update info about an enrollment
+     *
+     * @param request The Http request
+     * @return The HTML form to update info
+     */
+    @View( VIEW_MODIFY_ENROLLMENT )
+    public XPage getModifyEnrollment( HttpServletRequest request )
+    {
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ENROLLMENT ) );
+
+        if ( _enrollment == null  || ( _enrollment.getId( ) != nId ))
+        {
+            _enrollment = EnrollmentHome.findByPrimaryKey( nId );
+        }
+
+        Map<String, Object> model = getModel(  );
+        model.put( MARK_ENROLLMENT, _enrollment );
+
+        return getXPage( TEMPLATE_MODIFY_ENROLLMENT, request.getLocale(  ), model );
+    }
+
+    /**
+     * Process the change form of an enrollment
+     *
+     * @param request The Http request
+     * @return The Jsp URL of the process result
+     */
+    @Action( ACTION_MODIFY_ENROLLMENT )
+    public XPage doModifyEnrollment( HttpServletRequest request )
+    {
+        populate( _enrollment, request );
+
+        // Check constraints
+        if ( !validateBean( _enrollment, getLocale( request ) ) )
+        {
+            return redirect( request, VIEW_MODIFY_ENROLLMENT, PARAMETER_ID_ENROLLMENT, _enrollment.getId( ) );
+        }
+
+        EnrollmentHome.update( _enrollment );
+        addInfo( INFO_ENROLLMENT_UPDATED, getLocale( request ) );
+
+        return redirectView( request, VIEW_MANAGE_ENROLLMENTS );
+    }
 }
