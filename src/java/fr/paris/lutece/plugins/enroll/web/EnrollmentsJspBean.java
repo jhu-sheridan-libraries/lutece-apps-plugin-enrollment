@@ -251,11 +251,12 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     public String getModifyEnrollment( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ENROLLMENT ) );
-        //int projectId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
+        int projectId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
         _enrollment = EnrollmentHome.findByPrimaryKey( nId );
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_ENROLLMENT, _enrollment );
+        model.put( PARAMETER_ID_PROJECT, projectId);
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_ENROLLMENT, TEMPLATE_MODIFY_ENROLLMENT, model );
     }
 
@@ -268,6 +269,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     @Action( ACTION_MODIFY_ENROLLMENT )
     public String doModifyEnrollment( HttpServletRequest request )
     {
+        int projectId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
         _enrollment = new Enrollment();
         populate( _enrollment, request );
 
@@ -294,6 +296,6 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
 
         addInfo( INFO_ENROLLMENT_UPDATED, getLocale(  ) );
 
-        return redirectView( request, VIEW_MANAGE_ENROLLMENTS );
+        return redirect( request, VIEW_MANAGE_ENROLLMENTS, PARAMETER_ID_PROJECT, projectId);
     }
 }
