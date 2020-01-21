@@ -19,6 +19,7 @@
             <input type="hidden" id="id" name="id"/>
             <th>#i18n{enroll.manage_projects.columnName}</th>
             <th>#i18n{enroll.manage_projects.columnSize}</th>
+            <th>#i18n{enroll.manage_projects.columnCurrentSize}</th>
             <th>#i18n{portal.util.labelActions}</th>
         </tr>
         <@tableHeadBodySeparator />
@@ -30,6 +31,9 @@
             </td>
             <td>
                 ${project.size}
+            </td>
+            <td>
+                ${project.currentSize}
             </td>
         <td>
             <#if project.active = 0>

@@ -6,9 +6,10 @@
     <@messages errors=errors />
     <input type="hidden" id="id" name="id" value="${enrollment.id}"/>
     <input type="hidden" id="projectId" name="projectId" value="${projectId}"/>
+    <input type="hidden" id="program" name="program" value="${enrollment.program}"/>
 
     <@fieldInputText i18nLabelKey="enroll.modify_enrollment.labelName" inputName="name" mandatory=true value="${enrollment.name}" i18nHelpBlockKey="enroll.modify_enrollment.labelName.help" />
-    <@fieldInputText i18nLabelKey="enroll.modify_enrollment.labelProgram" inputName="program" mandatory=true value="${enrollment.program}" i18nHelpBlockKey="enroll.modify_enrollment.labelProgram.help" />
+    <@fieldStaticText i18nLabelKey="enroll.modify_enrollment.labelProgram" > ${enrollment.program} </@fieldStaticText>
     <@fieldInputText i18nLabelKey="enroll.modify_enrollment.labelEmail" inputName="email" mandatory=true value="${enrollment.email}" i18nHelpBlockKey="enroll.modify_enrollment.labelEmail.help" />
     <@fieldInputText i18nLabelKey="enroll.modify_enrollment.labelPhone" inputName="phone" mandatory=true value="${enrollment.phone}" i18nHelpBlockKey="enroll.modify_enrollment.labelPhone.help" />
 

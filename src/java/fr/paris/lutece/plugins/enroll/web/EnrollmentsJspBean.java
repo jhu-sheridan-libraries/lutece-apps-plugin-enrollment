@@ -281,19 +281,6 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
 
         EnrollmentHome.update( _enrollment );
 
-        List<Project> listProjects = ProjectHome.getProjectsList();
-        for (Project project : listProjects) {
-            if (project.getName().equals(_enrollment.getProgram())) {
-                project.setCurrentSize(project.getCurrentSize()+1);
-                if (project.getSize() > 0) {
-                    if (project.getCurrentSize() == project.getSize() && project.getActive() == 1) {
-                        project.setActive(0);
-                    }
-                }
-                ProjectHome.update(project);
-            }
-        }
-
         addInfo( INFO_ENROLLMENT_UPDATED, getLocale(  ) );
 
         return redirect( request, VIEW_MANAGE_ENROLLMENTS, PARAMETER_ID_PROJECT, projectId);
