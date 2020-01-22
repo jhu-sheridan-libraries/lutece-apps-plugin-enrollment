@@ -10,14 +10,14 @@
 
             <@messages errors=errors />
             <input type="hidden" id="id" name="id"/>
-						<div class="form-group">
+            <div class="form-group">
                 <label class="col-sm-2 control-label" for="name" >#i18n{enroll.create_enrollment.labelProgram} :</label>
                 <div class="col-sm-6">
                     <select class="form-control" id="program" name="program">
                       <#list refListProjects as item>
                         <option value="${item.name}" >${item.name}</option>
                       </#list>
-										</select>
+                    </select>
                     <span class="help-block">#i18n{enroll.create_enrollment.labelProgram.help}</span>
                 </div>
             </div>
