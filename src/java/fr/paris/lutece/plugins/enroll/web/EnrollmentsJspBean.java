@@ -25,9 +25,10 @@ import javax.servlet.http.HttpServletRequest;
 public class EnrollmentsJspBean extends ManageEnrollJspBean
 {
     // Template
-    private static final String TEMPLATE_MANAGE_ENROLLMENTS="/skin/plugins/enroll/manage_enrollments.html";
+    private static final String TEMPLATE_MANAGE_ENROLLMENTS="/admin/plugins/enroll/manage_enrollments.html";
     private static final String TEMPLATE_CREATE_ENROLLMENT="/skin/plugins/enroll/create_enrollment.html";
     private static final String TEMPLATE_MODIFY_ENROLLMENT="/admin/plugins/enroll/modify_enrollment.html";
+    private static final String TEMPLATE_ADD_ENROLLMENT_TO_PROJECT="/admin/plugins/enroll/add_enrollment_to_project.html";
 
     // Parameters
     private static final String PARAMETER_ID_ENROLLMENT = "id";
@@ -56,12 +57,14 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     private static final String VIEW_MANAGE_ENROLLMENTS = "manageEnrollments";
     private static final String VIEW_CREATE_ENROLLMENT = "createEnrollment";
     private static final String VIEW_MODIFY_ENROLLMENT = "modifyEnrollment";
+    private static final String VIEW_ADD_ENROLLMENT_TO_PROJECT = "addEnrollmentToProject";
 
     // Actions
     private static final String ACTION_CREATE_ENROLLMENT = "createEnrollment";
     private static final String ACTION_MODIFY_ENROLLMENT = "modifyEnrollment";
     private static final String ACTION_REMOVE_ENROLLMENT = "removeEnrollment";
     private static final String ACTION_CONFIRM_REMOVE_ENROLLMENT = "confirmRemoveEnrollment";
+    private static final String ACTION_ADD_ENROLLMENT_TO_PROJECT = "addEnrollmentToProject";
 
     // Infos
     private static final String INFO_ENROLLMENT_CREATED = "enroll.info.enrollment.created";
@@ -284,5 +287,57 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
         addInfo( INFO_ENROLLMENT_UPDATED, getLocale(  ) );
 
         return redirect( request, VIEW_MANAGE_ENROLLMENTS, PARAMETER_ID_PROJECT, projectId);
+    }
+
+    /**
+     * Returns the form to add an enrollment to a project
+     *
+     * @param request The Http request
+     * @return The HTML form to update info
+     */
+    @View( VIEW_ADD_ENROLLMENT_TO_PROJECT )
+    public String getAddEnrollmentToProject( HttpServletRequest request )
+    {
+        int projectId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
+        Project project = ProjectHome.findByPrimaryKey( projectId );
+
+        Map<String, Object> model = getModel(  );
+        model.put( MARK_PROJECT, project );
+        return getPage( PROPERTY_PAGE_TITLE_CREATE_ENROLLMENT, TEMPLATE_ADD_ENROLLMENT_TO_PROJECT, model );
+    }
+
+    /**
+     * Process the addition form of an enrollment to a project
+     *
+     * @param request The Http request
+     * @return The Jsp URL of the process result
+     */
+    @Action( ACTION_ADD_ENROLLMENT_TO_PROJECT )
+    public String doAddEnrollmentToProject( HttpServletRequest request )
+    {
+        int projectId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
+        Project project = ProjectHome.findByPrimaryKey(projectId);
+        _enrollment = new Enrollment();
+        populate( _enrollment, request );
+
+        // Check constraints
+        if ( !validateBean( _enrollment, VALIDATION_ATTRIBUTES_PREFIX ) )
+        {
+            return redirect( request, VIEW_MODIFY_ENROLLMENT, PARAMETER_ID_ENROLLMENT, _enrollment.getId( ) );
+        }
+
+        EnrollmentHome.create( _enrollment );
+        project.setCurrentSize(project.getCurrentSize()+1);
+        if (project.getSize() > 0) {
+            if (project.getCurrentSize() == project.getSize() && project.getActive() == 1) {
+                project.setActive(0);
+            }
+        }
+        ProjectHome.update(project);
+
+        addInfo( INFO_ENROLLMENT_UPDATED, getLocale(  ) );
+
+        return redirect( request, VIEW_MANAGE_ENROLLMENTS, PARAMETER_ID_PROJECT, projectId);
+
     }
 }
