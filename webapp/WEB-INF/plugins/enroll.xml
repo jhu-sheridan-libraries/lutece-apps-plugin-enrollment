@@ -9,7 +9,7 @@
     <user-guide></user-guide>
     <description>enroll.plugin.description</description>
     <provider>enroll.plugin.provider</provider>
-    <provider-url>https://www.cs.jhu.edu</provider-url>
+    <provider-url>https://www.library.jhu.edu/</provider-url>
     <icon-url>images/admin/skin/feature_default_icon.png</icon-url>
     <copyright>Copyright (c) 2018 Johns Hopkins University</copyright>
     <db-pool-required>1</db-pool-required>
