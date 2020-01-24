@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.enroll.business.portlet;
 
+import fr.paris.lutece.plugins.enroll.web.EnrollmentsJspBean;
 import fr.paris.lutece.portal.business.portlet.PortletHtmlContent;
-import fr.paris.lutece.plugins.enroll.web.EnrollmentXPage;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,7 +65,7 @@ public class EnrollPortlet extends PortletHtmlContent
     {
       if ( request != null )
       {
-          return EnrollmentXPage.getEnrollmentHtml( request, request.getLocale( ) );
+          return EnrollmentsJspBean.getEnrollmentHtml( request, request.getLocale( ) );
       }
 
       return StringUtils.EMPTY;

@@ -6,15 +6,20 @@ import fr.paris.lutece.plugins.enroll.business.project.Project;
 import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import fr.paris.lutece.util.ReferenceList;
+
+import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
@@ -339,5 +344,31 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
 
         return redirect( request, VIEW_MANAGE_ENROLLMENTS, PARAMETER_ID_PROJECT, projectId);
 
+    }
+
+    /**
+     * Get the HTML content of the enrollment form
+     *
+     * @param request
+     *            The request
+     * @param locale
+     *            The locale
+     * @return The HTML content
+     */
+    public static String getEnrollmentHtml( HttpServletRequest request, Locale locale )
+    {
+        Collection<Project> listProjects = ProjectHome.getProjectsList( );
+        ReferenceList refListProjects = new ReferenceList( );
+        for ( Project project : listProjects )
+        {
+            if (project.getActive() == 1) {
+                refListProjects.addItem( project.getId( ), project.getName( ) );
+            }
+        }
+        Map<String, Object> model = new HashMap<>( );
+        model.put( MARK_LIST_PROJECTS, refListProjects );
+
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_ENROLLMENT, locale, model );
+        return template.getHtml( );
     }
 }

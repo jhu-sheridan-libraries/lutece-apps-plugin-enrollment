@@ -7,8 +7,10 @@
     <bean id="enroll.projectDAO" class="fr.paris.lutece.plugins.enroll.business.project.ProjectDAO" />
     <bean id="enroll.enrollmentDAO" class="fr.paris.lutece.plugins.enroll.business.enrollment.EnrollmentDAO" />
     <bean id="enroll.projectRest" class="fr.paris.lutece.plugins.enroll.rs.ProjectRest" />
-
     <bean id="enroll.swaggerRest" class="fr.paris.lutece.plugins.enroll.rs.SwaggerRest" />
-
     <bean id="enroll.EnrollPortletDAO" class="fr.paris.lutece.plugins.enroll.business.portlet.EnrollPortletDAO" />
+
+    <bean id="enroll.ProjectJspBean" class="fr.paris.lutece.plugins.enroll.web.ProjectJspBean" />
+    <bean id="enroll.EnrollmentsJspBean" class="fr.paris.lutece.plugins.enroll.web.EnrollmentsJspBean" />
+
 </beans>
