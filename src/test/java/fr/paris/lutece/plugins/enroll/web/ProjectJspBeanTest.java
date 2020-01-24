@@ -4,7 +4,6 @@ import fr.paris.lutece.plugins.enroll.business.project.Project;
 import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.test.LuteceTestCase;
-import org.junit.BeforeClass;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.context.request.RequestContextListener;
@@ -46,6 +45,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
         try {
                 instance.doCreateProject(request);
         } catch (NullPointerException e) {
+            //expected
         }
 
         //at this point this project should be in the database - let's look for it
@@ -64,7 +64,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
 
         listener.requestDestroyed( new ServletRequestEvent( context, request ) );
     }
-    
+
     public void testDoChangeProjectStatus() {
 
     }
