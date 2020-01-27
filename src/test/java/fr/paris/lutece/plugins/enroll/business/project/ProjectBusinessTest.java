@@ -1,4 +1,4 @@
-package fr.paris.lutece.plugins.enroll.business;
+package fr.paris.lutece.plugins.enroll.business.project;
 
 import fr.paris.lutece.plugins.enroll.business.project.Project;
 import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
