@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.enroll.business.project;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * This is the business class for the object Project
@@ -127,5 +128,22 @@ public class Project implements Serializable
 
     public void setCurrentSize( int cs ) {
       _currentsize = cs;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Project project = (Project) o;
+        return _nId == project._nId &&
+                _size == project._size &&
+                _currentsize == project._currentsize &&
+                _active == project._active &&
+                Objects.equals(_strName, project._strName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(_nId, _strName, _size, _currentsize, _active);
     }
 }

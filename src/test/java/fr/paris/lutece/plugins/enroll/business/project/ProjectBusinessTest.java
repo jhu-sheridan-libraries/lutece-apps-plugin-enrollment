@@ -1,7 +1,5 @@
 package fr.paris.lutece.plugins.enroll.business.project;
 
-import fr.paris.lutece.plugins.enroll.business.project.Project;
-import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.test.LuteceTestCase;
 
 import java.util.List;
@@ -32,10 +30,7 @@ public class ProjectBusinessTest extends LuteceTestCase {
         //create test
         ProjectHome.create( project );
         Project projectStored = ProjectHome.findByPrimaryKey( project.getId() );
-        assertEquals( project.getName(), projectStored.getName() );
-        assertEquals( project.getActive(), projectStored.getActive() );
-        assertEquals( project.getCurrentSize(), projectStored.getCurrentSize() );
-        assertEquals( project.getSize(), projectStored.getSize() );
+        assertEquals(project, projectStored);
 
         //update test
         project.setActive( ACTIVE2 );
@@ -45,15 +40,11 @@ public class ProjectBusinessTest extends LuteceTestCase {
 
         ProjectHome.update( project );
         projectStored = ProjectHome.findByPrimaryKey( project.getId() );
-        assertEquals( project.getName(), projectStored.getName() );
-        assertEquals( project.getActive(), projectStored.getActive() );
-        assertEquals( project.getCurrentSize(), projectStored.getCurrentSize() );
-        assertEquals( project.getSize(), projectStored.getSize() );
+        assertEquals(project, projectStored);
 
         //list test
         List<Project> projectsList = ProjectHome.getProjectsList();
-        assertEquals( 1, projectsList.size() );
-        assertEquals( project.getId(), projectsList.get(0).getId());
+        assertEquals( project, projectsList.get(projectsList.size()-1));
 
         // Delete test
         ProjectHome.remove( project.getId( ) );

@@ -3,6 +3,7 @@ package fr.paris.lutece.plugins.enroll.business.enrollment;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Enrollment implements Serializable {
   private int _nId;
@@ -49,5 +50,22 @@ public class Enrollment implements Serializable {
 
   public void setPhone(String number) {
     _strContactNumber = number;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Enrollment that = (Enrollment) o;
+    return _nId == that._nId &&
+            Objects.equals(_strEnrollment, that._strEnrollment) &&
+            Objects.equals(_strContactName, that._strContactName) &&
+            Objects.equals(_strContactEmail, that._strContactEmail) &&
+            Objects.equals(_strContactNumber, that._strContactNumber);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(_nId, _strEnrollment, _strContactName, _strContactEmail, _strContactNumber);
   }
 }
