@@ -200,6 +200,8 @@ public class ProjectJspBean extends ManageEnrollJspBean
         Map<String, Object> model = getModel(  );
         model.put( PARAMETER_EMAILS , result );
 
+        addInfo(INFO_EMAILS_COPIED, getLocale());
+
         return getPage( " ", TEMPLATE_EMAIL_ALL, model );
     }
 
