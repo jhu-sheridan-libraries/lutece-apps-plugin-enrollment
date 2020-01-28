@@ -57,8 +57,8 @@ public class ProjectJspBeanTest extends LuteceTestCase {
         // this should be the project we just added
         Project latestProject = projectList.get(newProjectId-1);
 
-        assertEquals( latestProject.getName(), name );
-        assertEquals( Integer.toString(latestProject.getSize()), size );
+        assertEquals( name, latestProject.getName() );
+        assertEquals( size, Integer.toString(latestProject.getSize()) );
         assertEquals( 1, latestProject.getActive() );
         assertEquals( 0, latestProject.getCurrentSize() );
         assertEquals( newProjectId,  latestProject.getId() );
