@@ -4,6 +4,7 @@ import fr.paris.lutece.plugins.enroll.business.project.Project;
 import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.test.LuteceTestCase;
+import org.mockito.Mockito;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.context.request.RequestContextListener;
@@ -12,17 +13,20 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequestEvent;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+
 
 public class ProjectJspBeanTest extends LuteceTestCase {
 
     RequestContextListener listener = new RequestContextListener();
     ServletContext context = new MockServletContext();
-    int newProjectId;
 
     public void testDoCreateProject() {
 
         String name = "New Project To Create";
         String size = "10";
+        int newProjectId;
 
         MockHttpServletRequest request = new MockHttpServletRequest( );
 
@@ -39,14 +43,11 @@ public class ProjectJspBeanTest extends LuteceTestCase {
         listener.requestInitialized( new ServletRequestEvent( context, request ) );
 
         ProjectJspBean instance = SpringContextService.getBean( "enroll.ProjectJspBean" );
+        //mock this method called in the return - we don't need it, and it gives NPE if invoked here
+        ProjectJspBean instance1 = Mockito.spy( instance );
+        Mockito.doReturn("Return value not needed - ignored").when(instance1).redirectView( any(), anyString() );
 
-        //return statement will give us an NPE - we don't need the return value,
-        //so we catch the exception and ignore it
-        try {
-                instance.doCreateProject(request);
-        } catch (NullPointerException e) {
-            //expected
-        }
+        instance1.doCreateProject(request);
 
         //at this point this project should be in the database - let's look for it
         //currentsize should initialize to 0; active to 1; id is assigned upon creation,
@@ -71,7 +72,8 @@ public class ProjectJspBeanTest extends LuteceTestCase {
 
     public void testDoRemoveProject() {
 
-        }
+    }
+
     public void testDoModifyProject() {
 
     }

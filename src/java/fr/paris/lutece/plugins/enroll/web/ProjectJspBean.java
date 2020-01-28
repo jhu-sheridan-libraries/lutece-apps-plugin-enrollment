@@ -331,4 +331,10 @@ public class ProjectJspBean extends ManageEnrollJspBean
 
         return redirectView( request, VIEW_MANAGE_PROJECTS );
     }
+
+    // override here changes access, allows us to mock this method in tests
+    @Override
+    protected String redirectView( HttpServletRequest request, String strView ) {
+        return super.redirectView( request, strView );
+    }
 }
