@@ -223,7 +223,7 @@ public class ProjectJspBean extends ManageEnrollJspBean
             }
         }
         ProjectHome.remove( nId );
-        addInfo( INFO_PROJECT_REMOVED, getLocale(  ) );
+        addInfo( INFO_PROJECT_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_PROJECTS );
     }
