@@ -1,17 +1,22 @@
 <#include "manageenroll_tabs.html" />
 <@tabs tab="enrollment" />
 
-<@rowBoxHeader i18nTitleKey="enroll.modify_enrollment.title">
-<form class="form-horizontal" method="post" name="modify_enrollment" action="jsp/admin/plugins/enroll/ManageEnrollments.jsp">
+<@boxHeader i18nTitleKey="enroll.modify_enrollment.title"/>
+<@tform class="form-horizontal" method="post" name="modify_enrollment" action="jsp/admin/plugins/enroll/ManageEnrollments.jsp">
     <@messages errors=errors />
     <input type="hidden" id="projectId" name="projectId" value="${project.id}"/>
     <input type="hidden" id="program" name="program" value="${project.name}"/>
-
-    <@fieldInputText i18nLabelKey="enroll.modify_enrollment.labelName" inputName="name" mandatory=true i18nHelpBlockKey="enroll.modify_enrollment.labelName.help" />
-    <@fieldStaticText i18nLabelKey="enroll.modify_enrollment.labelProgram" > ${project.name} </@fieldStaticText>
-    <@fieldInputText i18nLabelKey="enroll.modify_enrollment.labelEmail" inputName="email"  i18nHelpBlockKey="enroll.modify_enrollment.labelEmail.help" />
-    <@fieldInputText i18nLabelKey="enroll.modify_enrollment.labelPhone" inputName="phone" i18nHelpBlockKey="enroll.modify_enrollment.labelPhone.help" />
-
-    <@actionButtons button1Name="action_addEnrollmentToProject" button2Name="view_manageEnrollment"/>
-</form>
-</@rowBoxHeader>
+    <@formGroup labelFor="name" labelKey='#i18n{enroll.modify_enrollment.labelName}' helpKey='#i18n{enroll.modify_enrollment.labelName.help}' mandatory=true>
+        <@input type='text' name='name' maxlength=50 />
+    </@formGroup>
+    <@formGroup labelKey='#i18n{enroll.modify_enrollment.labelProgram}'>
+        <@staticText> ${project.name} </@staticText>
+    </@formGroup>
+    <@formGroup labelFor="email" labelKey='#i18n{enroll.modify_enrollment.labelEmail}' helpKey='#i18n{enroll.modify_enrollment.labelEmail.help}' mandatory=true>
+        <@input type='email' name='email' maxlength=50 />
+    </@formGroup>
+    <@formGroup labelFor="phone" labelKey='#i18n{enroll.modify_enrollment.labelPhone}' helpKey='#i18n{enroll.modify_enrollment.labelPhone.help}' mandatory=true>
+        <@input type='text' name='phone' maxlength=50 />
+    </@formGroup>
+ <@actionButtons button1Name="action_addEnrollmentToProject" button2Name="view_manageEnrollment"/>
+</@tform>
