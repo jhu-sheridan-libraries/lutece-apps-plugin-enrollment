@@ -47,8 +47,7 @@ public class EnrollmentBusinessTest extends LuteceTestCase {
 
         //list test
         List<Enrollment> enrollmentsList = EnrollmentHome.getEnrollmentsList();
-        assertEquals( 1, enrollmentsList.size() );
-        assertEquals( enrollment.getId(), enrollmentsList.get(0).getId());
+        assertEquals( enrollment, enrollmentsList.get(enrollmentsList.size()-1));
 
         // Delete test
         EnrollmentHome.remove( enrollment.getId( ) );
