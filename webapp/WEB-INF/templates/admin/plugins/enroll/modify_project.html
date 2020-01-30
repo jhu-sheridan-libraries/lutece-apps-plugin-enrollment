@@ -11,7 +11,9 @@
     <@formGroup labelFor='size' labelKey='#i18n{enroll.create_project.labelSize}' helpKey='#i18n{enroll.create_project.labelSize.help}' mandatory=true>
         <@input  type='number' name='size' maxlength=50 value="${project.size}"/>
     </@formGroup>
-    <@actionButtons button1Name="action_modifyProject" button2Name="view_manageProjects"/>
+    <@formGroup>
+        <@actionButtons button1Name="action_modifyProject" button2Name="view_manageProjects"/>
+    </@formGroup>
 </@tform>
 
 

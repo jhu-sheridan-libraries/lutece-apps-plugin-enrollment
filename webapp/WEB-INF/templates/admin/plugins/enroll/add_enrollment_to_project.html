@@ -18,5 +18,7 @@
     <@formGroup labelFor="phone" labelKey='#i18n{enroll.modify_enrollment.labelPhone}' helpKey='#i18n{enroll.modify_enrollment.labelPhone.help}' mandatory=true>
         <@input type='text' name='phone' maxlength=50 />
     </@formGroup>
- <@actionButtons button1Name="action_addEnrollmentToProject" button2Name="view_manageEnrollment"/>
+    <@formGroup>
+        <@actionButtons button1Name="action_addEnrollmentToProject" button2Name="view_manageEnrollment"/>
+    </@formGroup>
 </@tform>
