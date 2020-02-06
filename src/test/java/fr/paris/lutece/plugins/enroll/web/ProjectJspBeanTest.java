@@ -4,15 +4,11 @@ import fr.paris.lutece.plugins.enroll.business.project.Project;
 import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.test.LuteceTestCase;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.mockito.Mockito;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.context.request.RequestContextListener;
 
 import javax.servlet.ServletContext;

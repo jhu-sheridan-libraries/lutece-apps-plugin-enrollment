@@ -16,9 +16,18 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequestEvent;
 import java.util.List;
 
-import static fr.paris.lutece.plugins.enroll.web.EnrollmentsJspBean.*;
+import static fr.paris.lutece.plugins.enroll.web.EnrollmentsJspBean.PARAMETER_EMAIL_ENROLLMENT;
+import static fr.paris.lutece.plugins.enroll.web.EnrollmentsJspBean.PARAMETER_ID_ENROLLMENT;
+import static fr.paris.lutece.plugins.enroll.web.EnrollmentsJspBean.PARAMETER_NAME_ENROLLMENT;
+import static fr.paris.lutece.plugins.enroll.web.EnrollmentsJspBean.PARAMETER_PHONE_ENROLLMENT;
+import static fr.paris.lutece.plugins.enroll.web.EnrollmentsJspBean.PARAMETER_PROGRAM_ENROLLMENT;
+
 import static fr.paris.lutece.plugins.enroll.web.EnrollmentsJspBean.PARAMETER_ID_PROJECT;
-import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.*;
+import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_NAME_PROJECT;
+import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_SIZE_PROJECT;
+import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_CURRENTSIZE_PROJECT;
+import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_STATUS_PROJECT;
+
 import static org.mockito.ArgumentMatchers.*;
 
 
