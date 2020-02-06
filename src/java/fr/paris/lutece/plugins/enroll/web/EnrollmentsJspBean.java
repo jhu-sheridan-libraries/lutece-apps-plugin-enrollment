@@ -36,8 +36,13 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     private static final String TEMPLATE_ADD_ENROLLMENT_TO_PROJECT="/admin/plugins/enroll/add_enrollment_to_project.html";
 
     // Parameters
-    private static final String PARAMETER_ID_ENROLLMENT = "id";
-    private static final String PARAMETER_ID_PROJECT = "projectId";
+    protected static final String PARAMETER_ID_ENROLLMENT = "id";
+    protected static final String PARAMETER_NAME_ENROLLMENT = "name";
+    protected static final String PARAMETER_PROGRAM_ENROLLMENT = "program";
+    protected static final String PARAMETER_PHONE_ENROLLMENT = "phone";
+    protected static final String PARAMETER_EMAIL_ENROLLMENT = "email";
+    protected static final String PARAMETER_ID_PROJECT = "projectId";
+
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_ENROLLMENTS = "enroll.manage_enrollments.pageTitle";
@@ -371,4 +376,16 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_ENROLLMENT, locale, model );
         return template.getHtml( );
     }
+
+    // override here changes access, allows us to mock this method in tests
+    @Override
+    protected String redirect( HttpServletRequest request, String strView, String strParameter, int nValue ) {
+        return super.redirect( request, strView, strParameter, nValue );
+    }
+
+    @Override
+    protected String getPage(String strPageTitleProperty, String strTemplate, Map<String, Object> model) {
+        return super.getPage(strPageTitleProperty, strTemplate, model);
+    }
+
 }

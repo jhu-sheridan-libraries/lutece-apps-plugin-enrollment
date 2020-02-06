@@ -32,7 +32,11 @@ public class ProjectJspBean extends ManageEnrollJspBean
     private static final String TEMPLATE_EMAIL_ALL = "/admin/plugins/enroll/email_all.html";
 
     // Parameters
-    private static final String PARAMETER_ID_PROJECT = "id";
+    protected static final String PARAMETER_ID_PROJECT = "id";
+    protected static final String PARAMETER_NAME_PROJECT = "name";
+    protected static final String PARAMETER_SIZE_PROJECT = "size";
+    protected static final String PARAMETER_CURRENTSIZE_PROJECT = "currentsize";
+    protected static final String PARAMETER_STATUS_PROJECT = "active";
     private static final String PARAMETER_EMAILS = "emails";
 
     // Properties for page titles

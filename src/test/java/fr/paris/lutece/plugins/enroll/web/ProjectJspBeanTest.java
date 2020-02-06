@@ -4,37 +4,48 @@ import fr.paris.lutece.plugins.enroll.business.project.Project;
 import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.test.LuteceTestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import org.mockito.Mockito;
+
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.context.request.RequestContextListener;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequestEvent;
 import java.util.List;
 
+import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_NAME_PROJECT;
+import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_SIZE_PROJECT;
+import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_CURRENTSIZE_PROJECT;
+import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_STATUS_PROJECT;
+import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_ID_PROJECT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-
 
 public class ProjectJspBeanTest extends LuteceTestCase {
 
     RequestContextListener listener = new RequestContextListener();
     ServletContext context = new MockServletContext();
 
-    public void testDoCreateProject() {
+    public void testBusiness() {
 
-        String name = "New Project To Create";
-        String size = "10";
+        String name = "Test Project";
+        String size = "20";
         int newProjectId;
 
         MockHttpServletRequest request = new MockHttpServletRequest( );
 
-        request.addParameter( "name", name );
-        request.addParameter( "size", size );
-        request.addParameter( "currentsize", "" );
-        request.addParameter( "active", "" );
-        request.addParameter( "id", "" );
+        //test create project
+        request.addParameter( PARAMETER_NAME_PROJECT, name );
+        request.addParameter( PARAMETER_SIZE_PROJECT, size );
+        request.addParameter( PARAMETER_CURRENTSIZE_PROJECT, "" );
+        request.addParameter( PARAMETER_STATUS_PROJECT, "" );
+        request.addParameter(PARAMETER_ID_PROJECT, "" );
 
         List<Project> projectList = ProjectHome.getProjectsList();
         //project id is the database row number
@@ -63,19 +74,40 @@ public class ProjectJspBeanTest extends LuteceTestCase {
         assertEquals( 0, latestProject.getCurrentSize() );
         assertEquals( newProjectId,  latestProject.getId() );
 
+        // test that changing status works
+        request = new MockHttpServletRequest();
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(newProjectId));
+
+        instance1.doChangeProjectStatus(request);
+        latestProject = ProjectHome.findByPrimaryKey(newProjectId);
+        assertEquals(0, latestProject.getActive());
+
+        instance1.doChangeProjectStatus(request);
+        latestProject = ProjectHome.findByPrimaryKey(newProjectId);
+        assertEquals(1, latestProject.getActive());
+
+        //test modification of enrollment
+        Project modifiedProject = new Project();
+        modifiedProject.setName("New Project");
+        modifiedProject.setSize(20);
+        modifiedProject.setId(latestProject.getId());
+
+        request = new MockHttpServletRequest();
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(modifiedProject.getId()));
+        request.addParameter(PARAMETER_NAME_PROJECT, modifiedProject.getName());
+        request.addParameter(PARAMETER_SIZE_PROJECT, String.valueOf(modifiedProject.getSize()));
+
+        instance1.doModifyProject(request);
+        latestProject = ProjectHome.findByPrimaryKey(newProjectId);
+        assertEquals(modifiedProject.getName(), latestProject.getName());
+        assertEquals(modifiedProject.getSize(), latestProject.getSize());
+
+        //test removal
+        request = new MockHttpServletRequest();
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(modifiedProject.getId()));
+        instance1.doRemoveProject(request);
+        assertNull(ProjectHome.findByPrimaryKey(modifiedProject.getId()));
+
         listener.requestDestroyed( new ServletRequestEvent( context, request ) );
     }
-
-    public void testDoChangeProjectStatus() {
-
-    }
-
-    public void testDoRemoveProject() {
-
-    }
-
-    public void testDoModifyProject() {
-
-    }
-
 }
