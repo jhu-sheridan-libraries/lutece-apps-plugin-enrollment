@@ -1,18 +1,39 @@
 <#include "manageenroll_tabs.html" />
 <@tabs tab="enrollment" />
 
-<@rowBoxHeader i18nTitleKey="enroll.modify_enrollment.title">
-<form class="form-horizontal" method="post" name="modify_enrollment" action="jsp/admin/plugins/enroll/ManageEnrollments.jsp">
+<@boxHeader i18nTitleKey="enroll.modify_enrollment.title"/>
+<@tform class="form-horizontal" action="jsp/admin/plugins/enroll/ManageEnrollments.jsp" method="post" name="modify_enrollment" >
     <@messages errors=errors />
     <input type="hidden" id="id" name="id" value="${enrollment.id}"/>
     <input type="hidden" id="projectId" name="projectId" value="${projectId}"/>
     <input type="hidden" id="program" name="program" value="${enrollment.program}"/>
 
-    <@fieldInputText i18nLabelKey="enroll.modify_enrollment.labelName" inputName="name" mandatory=true value="${enrollment.name}" i18nHelpBlockKey="enroll.modify_enrollment.labelName.help" />
-    <@fieldStaticText i18nLabelKey="enroll.modify_enrollment.labelProgram" > ${enrollment.program} </@fieldStaticText>
-    <@fieldInputText i18nLabelKey="enroll.modify_enrollment.labelEmail" inputName="email" mandatory=true value="${enrollment.email}" i18nHelpBlockKey="enroll.modify_enrollment.labelEmail.help" />
-    <@fieldInputText i18nLabelKey="enroll.modify_enrollment.labelPhone" inputName="phone" mandatory=true value="${enrollment.phone}" i18nHelpBlockKey="enroll.modify_enrollment.labelPhone.help" />
+    <@formGroup labelKey='#i18n{enroll.modify_enrollment.labelName}' labelFor="name" helpKey='#i18n{enroll.modify_enrollment.labelName.help}' mandatory=true>
+        <@input type='text' name='name' value="${enrollment.name}" maxlength=50/>
+    </@formGroup>
 
-    <@actionButtons button1Name="action_modifyEnrollment" button2Name="view_manageEnrollment"/>
-</form>
-</@rowBoxHeader>
+    <@formGroup labelKey='#i18n{enroll.modify_enrollment.labelProgram}'>
+        <@staticText> ${enrollment.program} </@staticText>
+    </@formGroup>
+
+    <@formGroup labelKey='#i18n{enroll.modify_enrollment.labelEmail}' labelFor="email" helpKey='#i18n{enroll.modify_enrollment.labelEmail.help}' mandatory=true>
+        <@input type='email' name='email' value="${enrollment.email}" maxlength=50/>
+    </@formGroup>
+
+    <@formGroup labelKey='#i18n{enroll.modify_enrollment.labelPhone}' labelFor="phone" helpKey='#i18n{enroll.modify_enrollment.labelPhone.help}' mandatory=true>
+        <@input type='text' name='phone' value="${enrollment.phone}" maxlength=50/>
+    </@formGroup>
+
+    <div class="col-xs-12 col-sm-offset-3 col-sm-6">
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
+                <button class="btn btn-primary" name="action_modfyEnrollment" type="submit">
+                    <i class="fa fa-check"></i>&nbsp;#i18n{portal.admin.message.buttonValidate}
+                </button>
+                <button class="btn btn-default" name="view_manageEnrollment" type="submit" formnovalidate>
+                    <i class="fa fa-close"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
+                </button>
+            </div>
+        </div>
+    </div>
+</@tform>

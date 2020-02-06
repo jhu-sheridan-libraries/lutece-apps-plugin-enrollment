@@ -1,13 +1,28 @@
-<@rowBoxHeader i18nTitleKey="enroll.create_project.title">
-    <form class="form-horizontal" method="post" name="create_project" action="jsp/admin/plugins/enroll/ManageProjects.jsp">
+<@boxHeader i18nTitleKey="enroll.create_project.title"/>
+    <@tform class="form-horizontal" method="post" name="create_project" action="jsp/admin/plugins/enroll/ManageProjects.jsp">
         <@messages errors=errors />
         <input type="hidden" id="id" name="id"/>
+        <@formGroup labelFor="name" labelKey='#i18n{enroll.create_project.labelName}'  helpKey='#i18n{enroll.create_project.labelName.help}' mandatory=true>
+            <@input type='text' name='name' value="${project.name!''}" maxlength=50/>
+        </@formGroup>
 
-        <@fieldInputText i18nLabelKey="enroll.create_project.labelName" inputName="name" mandatory=true value="${project.name!''}" i18nHelpBlockKey="enroll.create_project.labelName.help" />
-        <@fieldInputText i18nLabelKey="enroll.create_project.labelSize" inputName="size" mandatory=true value="${project.size!''}" i18nHelpBlockKey="enroll.create_project.labelSize.help" />
+        <@formGroup labelFor="size" labelKey='#i18n{enroll.create_project.labelSize}'  helpKey='#i18n{enroll.create_project.labelSize.help}' mandatory=true>
+            <@input type='number' name='size' maxlength=50 value="${project.size!''}"/>
+        </@formGroup>
         <input type="hidden" id="currentsize" name="currentsize"/>
         <input type="hidden" id="active" name="active"/>
 
-        <@actionButtons button1Name="action_createProject" button2Name="view_manageProjects"/>
-    </form>
-</@rowBoxHeader>
+
+        <div class="col-xs-12 col-sm-offset-3 col-sm-6">
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
+                    <button class="btn btn-primary" name="action_createProject" type="submit">
+                        <i class="fa fa-check"></i>&nbsp;#i18n{portal.admin.message.buttonValidate}
+                    </button>
+                    <button class="btn btn-default" name="view_manageProject" type="submit" formnovalidate>
+                        <i class="fa fa-close"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </@tform>
