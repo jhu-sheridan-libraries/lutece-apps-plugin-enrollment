@@ -31,6 +31,16 @@
       </admin-feature>
     </admin-features>
 
+    <!-- XPages parameters -->
+    <applications>
+        <application>
+            <application-id>enrollment</application-id>
+            <application-class>fr.paris.lutece.plugins.enroll.web.EnrollmentXPage</application-class>
+        </application>
+    </applications>
+
+
+
     <!-- Portlet parameters -->
     <portlets>
      <portlet>
