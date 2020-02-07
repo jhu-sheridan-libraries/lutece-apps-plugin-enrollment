@@ -57,6 +57,8 @@ public class EnrollmentXPage extends MVCApplication {
       }
       model.put( MARK_LIST_PROJECTS, refListProjects );
 
+      System.out.println("MOOOOO" + refListProjects.size());
+
       return getXPage( TEMPLATE_CREATE_ENROLLMENT, request.getLocale(  ), model );
   }
 
@@ -80,7 +82,7 @@ public class EnrollmentXPage extends MVCApplication {
         if (project.getName().equals(_enrollment.getProgram())) {
           project.setCurrentSize(project.getCurrentSize()+1);
           if (project.getSize() > 0) {
-            if (project.getCurrentSize() == project.getSize() && project.getActive() == 1) {
+            if (project.getCurrentSize() >= project.getSize() && project.getActive() == 1) {
               project.setActive(0);
             }
           }

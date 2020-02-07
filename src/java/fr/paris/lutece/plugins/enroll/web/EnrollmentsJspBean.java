@@ -339,7 +339,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
         EnrollmentHome.create( _enrollment );
         project.setCurrentSize(project.getCurrentSize()+1);
         if (project.getSize() > 0) {
-            if (project.getCurrentSize() == project.getSize() && project.getActive() == 1) {
+            if (project.getCurrentSize() >= project.getSize() && project.getActive() == 1) {
                 project.setActive(0);
             }
         }
