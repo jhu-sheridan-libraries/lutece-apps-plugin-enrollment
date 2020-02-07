@@ -100,5 +100,7 @@ public class EnrollmentXPageTest extends LuteceTestCase {
 
         Project project = ProjectHome.findByPrimaryKey(latestProject.getId());
         assertEquals(1, project.getCurrentSize());
+
+        listener.requestDestroyed( new ServletRequestEvent( context, request ) );
     }
 }
