@@ -25,6 +25,7 @@ public class EnrollmentXPage extends MVCApplication {
 
   private static final String TEMPLATE_CREATE_ENROLLMENT="/skin/plugins/enroll/create_enrollment.html";
   private static final String TEMPLATE_ENROLLMENT_CREATED="/skin/plugins/enroll/enrollment_created.html";
+  private static final String TEMPLATE_ENROLLMENT_FAILED="/skin/plugins/enroll/enrollment_failed.html";
 
   // Parameters
   private static final String MARK_ENROLLMENT = "enrollment";
@@ -34,6 +35,7 @@ public class EnrollmentXPage extends MVCApplication {
 
   private static final String ACTION_CREATE_ENROLLMENT = "createEnrollment";
   private static final String INFO_ENROLLMENT_CREATED = "enroll.info.enrollment.createdModify";
+  private static final String INFO_ENROLLMENT_FAILED =  "enroll.info.enrollment.createFailed";
 
 
   private Enrollment _enrollment;
@@ -80,20 +82,23 @@ public class EnrollmentXPage extends MVCApplication {
       List<Project> listProjects = ProjectHome.getProjectsList();
       for (Project project : listProjects) {
         if (project.getName().equals(_enrollment.getProgram())) {
-          project.setCurrentSize(project.getCurrentSize()+1);
-          if (project.getSize() > 0) {
-            if (project.getCurrentSize() >= project.getSize() && project.getActive() == 1) {
-              project.setActive(0);
+            if (project.getSize() > 0) {
+                if (project.getCurrentSize() >= project.getSize() && project.getActive() == 1) {
+                    project.setActive(0);
+                }
             }
-          }
-          ProjectHome.update(project);
+            if (project.getActive() == 1 ) {
+                project.setCurrentSize(project.getCurrentSize() + 1);
+                ProjectHome.update(project);
+                addInfo( INFO_ENROLLMENT_CREATED, getLocale( request ) );
+                Map<String, Object> model = getModel(  );
+                return getXPage( TEMPLATE_ENROLLMENT_CREATED, request.getLocale(  ), model );
+            }
         }
       }
-
-      addInfo( INFO_ENROLLMENT_CREATED, getLocale( request ) );
-
+      addInfo(INFO_ENROLLMENT_FAILED, getLocale( request ) );
       Map<String, Object> model = getModel(  );
-      return getXPage( TEMPLATE_ENROLLMENT_CREATED, request.getLocale(  ), model );
+      return getXPage( TEMPLATE_ENROLLMENT_FAILED, request.getLocale(), model);
   }
 
   /**
