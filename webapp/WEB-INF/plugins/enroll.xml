@@ -38,8 +38,11 @@
             <application-class>fr.paris.lutece.plugins.enroll.web.EnrollmentXPage</application-class>
         </application>
     </applications>
+    <!-- Freemarker macro files -->
 
-
+    <freemarker-macro-files>
+        <freemarker-macro-file>*/enroll_macros.html</freemarker-macro-file>
+    </freemarker-macro-files>
 
     <!-- Portlet parameters -->
     <portlets>

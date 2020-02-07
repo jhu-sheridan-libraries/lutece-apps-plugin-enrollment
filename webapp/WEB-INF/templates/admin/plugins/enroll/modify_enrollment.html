@@ -24,16 +24,7 @@
         <@input type='text' name='phone' value="${enrollment.phone}" maxlength=50/>
     </@formGroup>
 
-    <div class="col-xs-12 col-sm-offset-3 col-sm-6">
-        <div class="form-group">
-            <div class="col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
-                <button class="btn btn-primary" name="action_modfyEnrollment" type="submit">
-                    <i class="fa fa-check"></i>&nbsp;#i18n{portal.admin.message.buttonValidate}
-                </button>
-                <button class="btn btn-default" name="view_manageEnrollment" type="submit" formnovalidate>
-                    <i class="fa fa-close"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
-                </button>
-            </div>
-        </div>
-    </div>
+    <@formGroup>
+        <@submitCancelButtons button1Name="action_modifyEnrollment" button2Name="view_manageEnrollment"/>
+    </@formGroup>
 </@tform>
