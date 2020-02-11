@@ -80,7 +80,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     private static final String INFO_ENROLLMENT_REMOVED = "enroll.info.enrollment.removed";
     private static final String INFO_ENROLLMENT_FAILED =  "enroll.info.enrollment.failed";
     private static final String INFO_PROJECT_INACTIVE = "enroll.info.project.inactive";
-    private static final String INFO_PROJECT_INCREASE = "enroll.info.project.increase";
+    private static final String INFO_PROJECT_FULL = "enroll.info.project.full";
     private static final String INFO_PROJECT_UPDATED = "enroll.info.project.updated";
 
     // Session variable to store working values
@@ -279,7 +279,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
                     addInfo ( INFO_PROJECT_INACTIVE, getLocale());
                 }
                 if ( !project.hasRoom()) {
-                    addInfo(INFO_PROJECT_INCREASE, getLocale());
+                    addInfo(INFO_PROJECT_FULL, getLocale());
                 }
             }
 

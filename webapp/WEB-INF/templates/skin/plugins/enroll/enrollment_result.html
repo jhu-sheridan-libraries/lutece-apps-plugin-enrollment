@@ -1,18 +1,18 @@
 <div class="col-sm-4"></div>
-<div class="col-sm-4">
-    <div class="login-box-body bg-yellow">
-        <#if success??>
-            <p class="lead text-center">#i18n{enroll.create_enrollment.successMessage}</p>
-        <#else>
-            <p class="lead text-center">#i18n{enroll.create_enrollment.failMessage}</p>
-        </#if>
-        <#if inactive?? && inactive=true>
+    <div class="col-sm-4">
+        <div class="login-box-body bg-yellow">
+            <#if success??>
+                <p class="lead text-center">#i18n{enroll.create_enrollment.successMessage}</p>
+            <#else>
+                <p class="lead text-center">#i18n{enroll.create_enrollment.failMessage}</p>
+            </#if>
+            <#if inactive?? && inactive=true>
                 <p class="lead text-center">#i18n{enroll.info.project.inactive}</p>
-        </#if>
-        <#if full?? && full=true>
+            </#if>
+            <#if full?? && full=true>
                 <p class="lead text-center">#i18n{enroll.info.project.full}</p>
-        </#if>
-        <p class="lead text-center">#i18n{enroll.create_enrollment.pageClose}</p>
-
+            </#if>
+            <p class="lead text-center">#i18n{enroll.create_enrollment.pageClose}</p>
+        </div>
     </div>
 <div class="col-sm-4"></div>
