@@ -6,13 +6,11 @@
         <#else>
             <p class="lead text-center">#i18n{enroll.create_enrollment.failMessage}</p>
         </#if>
-        <#if inactive??>
-            <p class="lead text-center">#i18n{enroll.info.project.inactive}</p>
-        <#else>
+        <#if inactive?? && inactive=true>
+                <p class="lead text-center">#i18n{enroll.info.project.inactive}</p>
         </#if>
-        <#if full??>
-            <p class="lead text-center">#i18n{enroll.info.project.full}</p>
-        <#else>
+        <#if full?? && full=true>
+                <p class="lead text-center">#i18n{enroll.info.project.full}</p>
         </#if>
         <p class="lead text-center">#i18n{enroll.create_enrollment.pageClose}</p>
 
