@@ -1,7 +1,7 @@
 <#include "manageenroll_tabs.html" />
-<@tabs tab="project" />
 
-<@boxHeader i18nTitleKey="enroll.modify_project.title" />
+<@boxHeader i18nTitleKey="enroll.modify_project.pageTitle" />
+<@messages infos=infos />
 <@tform name="modify_project" action="jsp/admin/plugins/enroll/ManageProjects.jsp">
     <@messages errors=errors />
     <input type="hidden" id="id" name="id" value="${project.id}"/>

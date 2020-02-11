@@ -65,12 +65,10 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
 
     // Views
     private static final String VIEW_MANAGE_ENROLLMENTS = "manageEnrollments";
-    private static final String VIEW_CREATE_ENROLLMENT = "createEnrollment";
     private static final String VIEW_MODIFY_ENROLLMENT = "modifyEnrollment";
     private static final String VIEW_ADD_ENROLLMENT_TO_PROJECT = "addEnrollmentToProject";
 
     // Actions
-    private static final String ACTION_CREATE_ENROLLMENT = "createEnrollment";
     private static final String ACTION_MODIFY_ENROLLMENT = "modifyEnrollment";
     private static final String ACTION_REMOVE_ENROLLMENT = "removeEnrollment";
     private static final String ACTION_CONFIRM_REMOVE_ENROLLMENT = "confirmRemoveEnrollment";
@@ -80,7 +78,10 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     private static final String INFO_ENROLLMENT_CREATED = "enroll.info.enrollment.created";
     private static final String INFO_ENROLLMENT_UPDATED = "enroll.info.enrollment.updated";
     private static final String INFO_ENROLLMENT_REMOVED = "enroll.info.enrollment.removed";
-    private static final String INFO_ENROLLMENT_FAILED =  "enroll.info.enrollment.createFailed";
+    private static final String INFO_ENROLLMENT_FAILED =  "enroll.info.enrollment.failed";
+    private static final String INFO_PROJECT_INACTIVE = "enroll.info.project.inactive";
+    private static final String INFO_PROJECT_INCREASE = "enroll.info.project.increase";
+    private static final String INFO_PROJECT_UPDATED = "enroll.info.project.updated";
 
     // Session variable to store working values
     private Enrollment _enrollment = null;
@@ -129,7 +130,6 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
         int projectId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
         url.addParameter( PARAMETER_ID_PROJECT, projectId );
 
-
         String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ENROLLMENT, url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
@@ -144,7 +144,6 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     @Action( ACTION_REMOVE_ENROLLMENT )
     public String doRemoveEnrollment( HttpServletRequest request )
     {
-
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ENROLLMENT ) );
         int projectId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
         List<Enrollment> listEnroll = EnrollmentHome.getEnrollmentsList();
@@ -268,16 +267,21 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
         }
 
         //add enrollment if the project is active and has room
-        if ( project.getActive() == 1 && ( project.getSize() == 0 || project.getCurrentSize() < project.getSize())) {
-            EnrollmentHome.create( _enrollment );
-            project.setCurrentSize(project.getCurrentSize() + 1);
-            ProjectHome.update(project);
-            addInfo( INFO_ENROLLMENT_CREATED, getLocale( request ) );
-            Map<String, Object> model = getModel(  );
-            addInfo( INFO_ENROLLMENT_UPDATED, getLocale(  ) );
-        } else {
-            addInfo( INFO_ENROLLMENT_FAILED, getLocale() );
-        }
+        if ( project.canAdd()) {
+                EnrollmentHome.create(_enrollment);
+                project.setCurrentSize(project.getCurrentSize() + 1);
+                ProjectHome.update(project);
+                addInfo(INFO_ENROLLMENT_CREATED, getLocale());
+                addInfo(INFO_PROJECT_UPDATED, getLocale());
+            } else {
+                addInfo( INFO_ENROLLMENT_FAILED, getLocale() );
+                if ( project.getActive() != 1) {
+                    addInfo ( INFO_PROJECT_INACTIVE, getLocale());
+                }
+                if ( !project.hasRoom()) {
+                    addInfo(INFO_PROJECT_INCREASE, getLocale());
+                }
+            }
 
         return redirect( request, VIEW_MANAGE_ENROLLMENTS, PARAMETER_ID_PROJECT, projectId);
 

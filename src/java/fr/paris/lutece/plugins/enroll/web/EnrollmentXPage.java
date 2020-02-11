@@ -24,19 +24,14 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 public class EnrollmentXPage extends MVCApplication {
 
   private static final String TEMPLATE_CREATE_ENROLLMENT="/skin/plugins/enroll/create_enrollment.html";
-  private static final String TEMPLATE_ENROLLMENT_CREATED="/skin/plugins/enroll/enrollment_created.html";
-  private static final String TEMPLATE_ENROLLMENT_FAILED="/skin/plugins/enroll/enrollment_failed.html";
+  private static final String TEMPLATE_ENROLLMENT_RESULT="skin/plugins/enroll/enrollment_result.html";
 
   // Parameters
   private static final String MARK_ENROLLMENT = "enrollment";
   private static final String MARK_LIST_PROJECTS = "refListProjects";
 
   private static final String VIEW_CREATE_ENROLLMENT = "createEnrollment";
-
   private static final String ACTION_CREATE_ENROLLMENT = "createEnrollment";
-  private static final String INFO_ENROLLMENT_CREATED = "enroll.info.enrollment.createdModify";
-  private static final String INFO_ENROLLMENT_FAILED =  "enroll.info.enrollment.createFailed";
-
 
   private Enrollment _enrollment;
 
@@ -74,23 +69,24 @@ public class EnrollmentXPage extends MVCApplication {
           return redirectView( request, VIEW_CREATE_ENROLLMENT );
       }
 
+      Map<String, Object> model = getModel();
       List<Project> listProjects = ProjectHome.getProjectsList();
-      for (Project project : listProjects) {
-        if (project.getName().equals(_enrollment.getProgram())) {
-            if ( project.getActive() == 1 && ( project.getSize() == 0 || project.getCurrentSize() < project.getSize())) {
-                EnrollmentHome.create(_enrollment);
-                project.setCurrentSize(project.getCurrentSize() + 1);
-                ProjectHome.update(project);
-                addInfo(INFO_ENROLLMENT_CREATED, getLocale(request));
-                Map<String, Object> model = getModel();
-                return getXPage(TEMPLATE_ENROLLMENT_CREATED, request.getLocale(), model);
-            }
-        }
-      }
 
-      addInfo(INFO_ENROLLMENT_FAILED, getLocale( request ) );
-      Map<String, Object> model = getModel(  );
-      return getXPage( TEMPLATE_ENROLLMENT_FAILED, request.getLocale(), model);
+      for (Project project : listProjects) {
+          if (project.getName().equals(_enrollment.getProgram())) {
+
+              if ( project.canAdd() ) {
+                    EnrollmentHome.create(_enrollment);
+                    project.setCurrentSize(project.getCurrentSize() + 1);
+                    ProjectHome.update(project);
+                    model.put("success", true);
+                } else {
+                    model.put("inactive", project.getActive()==0);
+                    model.put( "full", project.isFull());
+              }
+          }
+      }
+      return getXPage( TEMPLATE_ENROLLMENT_RESULT, request.getLocale(), model);
   }
 
   /**

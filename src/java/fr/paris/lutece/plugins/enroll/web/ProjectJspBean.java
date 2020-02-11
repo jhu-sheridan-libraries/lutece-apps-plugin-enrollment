@@ -153,7 +153,7 @@ public class ProjectJspBean extends ManageEnrollJspBean
       String strIdProject = request.getParameter( PARAMETER_ID_PROJECT );
       int nIdProject = Integer.parseInt( strIdProject );
       Project project = ProjectHome.findByPrimaryKey( nIdProject );
-      if (project.getActive() == 0 && project.getSize() != 0 && project.getSize() == project.getCurrentSize()) {
+      if (project.getActive() == 0 && !project.hasRoom() ) {
         addInfo( INFO_INCREASE_SIZE, getLocale(  ) );
         return redirectView( request, VIEW_MANAGE_PROJECTS );
       }
@@ -270,72 +270,28 @@ public class ProjectJspBean extends ManageEnrollJspBean
         {
             return redirect( request, VIEW_MODIFY_PROJECT, PARAMETER_ID_PROJECT, _project.getId( ) );
         }
-        if (_project.getSize() == 0) {
-          if (!(temp.equals(_project.getName()))) {
+
+        //first check to see if a name change is valid - cannot have two with the same name
+        if (!(temp.equals(_project.getName()))) {
             Collection<Project> listProjects = ProjectHome.getProjectsList( );
             for ( Project project : listProjects )
             {
-              if (project.getName().equals(_project.getName())) {
-                addInfo( INFO_PROJECT_SAME_NAME, getLocale(  ) );
-                return redirectView( request, VIEW_MANAGE_PROJECTS );
-              }
+                if (project.getName().equals(_project.getName())) {
+                    addInfo( INFO_PROJECT_SAME_NAME, getLocale(  ) );
+                    return redirectView( request, VIEW_MANAGE_PROJECTS );
+                }
             }
-          }
+        }
+
+        //now check to see if size constraints are ok
+        if ( _project.hasRoom() || _project.isFull() ) {
           ProjectHome.update( _project );
           addInfo( INFO_PROJECT_UPDATED, getLocale(  ) );
           return redirectView( request, VIEW_MANAGE_PROJECTS );
-        }
-        if (_project.getSize() < _project.getCurrentSize()) {
-          addInfo( INFO_SIZE_IS_SMALL, getLocale(  ) );
+        } else {
+          addInfo( INFO_SIZE_IS_SMALL, getLocale( ) );
           return redirect( request, VIEW_MODIFY_PROJECT, PARAMETER_ID_PROJECT, _project.getId( ) );
         }
-        if (_project.getSize() == _project.getCurrentSize()) {
-          _project.flipActive();
-          if (!(temp.equals(_project.getName()))) {
-            Collection<Project> listProjects = ProjectHome.getProjectsList( );
-            for ( Project project : listProjects )
-            {
-              if (project.getName().equals(_project.getName())) {
-                addInfo( INFO_PROJECT_SAME_NAME, getLocale(  ) );
-                return redirectView( request, VIEW_MANAGE_PROJECTS );
-              }
-            }
-          }
-          ProjectHome.update( _project );
-          addInfo( INFO_PROJECT_UPDATED, getLocale(  ) );
-          return redirectView( request, VIEW_MANAGE_PROJECTS );
-        }
-        if (_project.getSize() > tempSize && _project.getSize() > _project.getCurrentSize() && tempActive == 0) {
-          _project.flipActive();
-          if (!(temp.equals(_project.getName()))) {
-            Collection<Project> listProjects = ProjectHome.getProjectsList( );
-            for ( Project project : listProjects )
-            {
-              if (project.getName().equals(_project.getName())) {
-                addInfo( INFO_PROJECT_SAME_NAME, getLocale(  ) );
-                return redirectView( request, VIEW_MANAGE_PROJECTS );
-              }
-            }
-          }
-          ProjectHome.update( _project );
-          addInfo( INFO_PROJECT_UPDATED, getLocale(  ) );
-          return redirectView( request, VIEW_MANAGE_PROJECTS );
-        }
-        if (!(temp.equals(_project.getName()))) {
-          Collection<Project> listProjects = ProjectHome.getProjectsList( );
-          for ( Project project : listProjects )
-          {
-            if (project.getName().equals(_project.getName())) {
-              addInfo( INFO_PROJECT_SAME_NAME, getLocale(  ) );
-              return redirectView( request, VIEW_MANAGE_PROJECTS );
-            }
-          }
-        }
-
-        ProjectHome.update( _project );
-        addInfo( INFO_PROJECT_UPDATED, getLocale(  ) );
-
-        return redirectView( request, VIEW_MANAGE_PROJECTS );
     }
 
     // override here changes access, allows us to mock this method in tests

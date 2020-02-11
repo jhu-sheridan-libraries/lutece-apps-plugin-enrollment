@@ -130,6 +130,17 @@ public class Project implements Serializable
       _currentsize = cs;
     }
 
+    // three convenience methods to make code easier to read
+    public boolean hasRoom() {
+        return (_size==0 || _currentsize < _size);
+    }
+
+    public boolean canAdd() {
+        return (_active==1 && hasRoom());
+    }
+
+    public boolean isFull() { return _currentsize == _size && _size != 0; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -146,4 +157,6 @@ public class Project implements Serializable
     public int hashCode() {
         return Objects.hash(_nId, _strName, _size, _currentsize, _active);
     }
+
+
 }
