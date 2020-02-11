@@ -48,7 +48,7 @@ public class EnrollmentXPage extends MVCApplication {
       ReferenceList refListProjects = new ReferenceList( );
       for ( Project project : listProjects )
       {
-          if ( project.getActive() == 1 && (project.getSize() == 0 || project.getCurrentSize() < project.getSize() ) ) {
+          if ( project.canAdd() ) {
             refListProjects.addItem( project.getId( ), project.getName( ) );
           }
       }
