@@ -7,7 +7,6 @@ import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
-import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 
 import java.util.Map;
@@ -35,32 +34,9 @@ public class EnrollmentXPage extends MVCApplication {
 
   private Enrollment _enrollment;
 
-  @View( VIEW_CREATE_ENROLLMENT )
-  public XPage getCreateEnrollment( HttpServletRequest request )
-  {
-      if (_enrollment == null) {
-        _enrollment = new Enrollment();
-      }
-
-      Map<String, Object> model = getModel(  );
-      model.put( MARK_ENROLLMENT, _enrollment );
-      Collection<Project> listProjects = ProjectHome.getProjectsList( );
-      ReferenceList refListProjects = new ReferenceList( );
-      for ( Project project : listProjects )
-      {
-          if ( project.canAdd() ) {
-            refListProjects.addItem( project.getId( ), project.getName( ) );
-          }
-      }
-      model.put( MARK_LIST_PROJECTS, refListProjects );
-
-      return getXPage( TEMPLATE_CREATE_ENROLLMENT, request.getLocale(  ), model );
-  }
-
   @Action( ACTION_CREATE_ENROLLMENT )
   public XPage doCreateEnrollment( HttpServletRequest request )  {
       _enrollment = new Enrollment(  );
-
       populate( _enrollment, request );
 
       // Check constraints
@@ -74,7 +50,6 @@ public class EnrollmentXPage extends MVCApplication {
 
       for (Project project : listProjects) {
           if (project.getName().equals(_enrollment.getProgram())) {
-
               if ( project.canAdd() ) {
                     EnrollmentHome.create(_enrollment);
                     project.setCurrentSize(project.getCurrentSize() + 1);
@@ -84,6 +59,7 @@ public class EnrollmentXPage extends MVCApplication {
                     model.put("inactive", project.getActive()==0);
                     model.put( "full", project.isFull());
               }
+              break;
           }
       }
       return getXPage( TEMPLATE_ENROLLMENT_RESULT, request.getLocale(), model);
@@ -104,7 +80,7 @@ public class EnrollmentXPage extends MVCApplication {
       ReferenceList refListProjects = new ReferenceList( );
       for ( Project project : listProjects )
       {
-          if (project.getActive() == 1) {
+          if (project.canAdd() ) {
             refListProjects.addItem( project.getId( ), project.getName( ) );
           }
       }

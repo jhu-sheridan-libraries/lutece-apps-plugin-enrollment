@@ -99,6 +99,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
         for (Project project : listProjects) {
             if (project.getId() == _projectId) {
                 _projectName = project.getName();
+                break;
             }
         }
         List<Enrollment> listEnrollments = EnrollmentHome.getEnrollmentsList();
@@ -150,6 +151,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
         for (Enrollment enroll : listEnroll) {
           if (enroll.getId() == nId) {
             _enrollment = enroll;
+            break;
           }
         }
 
@@ -158,6 +160,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
           if ((project.getName()).equals(_enrollment.getProgram())) {
             project.setCurrentSize(project.getCurrentSize()-1);
             ProjectHome.update(project);
+            break;
           }
         }
 
@@ -170,6 +173,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
         for (Project project : listProjects) {
           if (project.getId() == projectId) {
             _projectName = project.getName();
+            break;
           }
         }
         List<Enrollment> listEnrollments = EnrollmentHome.getEnrollmentsList(  );
@@ -223,9 +227,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
         }
 
         EnrollmentHome.update( _enrollment );
-
         addInfo( INFO_ENROLLMENT_UPDATED, getLocale(  ) );
-
         return redirect( request, VIEW_MANAGE_ENROLLMENTS, PARAMETER_ID_PROJECT, projectId);
     }
 
@@ -285,32 +287,6 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
 
         return redirect( request, VIEW_MANAGE_ENROLLMENTS, PARAMETER_ID_PROJECT, projectId);
 
-    }
-
-    /**
-     * Get the HTML content of the enrollment form
-     *
-     * @param request
-     *            The request
-     * @param locale
-     *            The locale
-     * @return The HTML content
-     */
-    public static String getEnrollmentHtml( HttpServletRequest request, Locale locale )
-    {
-        Collection<Project> listProjects = ProjectHome.getProjectsList( );
-        ReferenceList refListProjects = new ReferenceList( );
-        for ( Project project : listProjects )
-        {
-            if (project.getActive() == 1) {
-                refListProjects.addItem( project.getId( ), project.getName( ) );
-            }
-        }
-        Map<String, Object> model = new HashMap<>( );
-        model.put( MARK_LIST_PROJECTS, refListProjects );
-
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_ENROLLMENT, locale, model );
-        return template.getHtml( );
     }
 
     // override here changes access, allows us to mock this method in tests
