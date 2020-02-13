@@ -283,11 +283,21 @@ public class ProjectJspBean extends ManageEnrollJspBean
             }
         }
 
-        //now check to see if size constraints are ok
+        //now check to see if size constraints are ok - if so, change is ok
         if ( _project.hasRoom() || _project.atCapacity() ) {
-          ProjectHome.update( _project );
-          addInfo( INFO_PROJECT_UPDATED, getLocale(  ) );
-          return redirectView( request, VIEW_MANAGE_PROJECTS );
+            //if there was a project name change, update project enrollments
+            if(!(temp.equals(_project.getName()))) {
+                List<Enrollment> enrollmentList = EnrollmentHome.getEnrollmentsList();
+                for (Enrollment enrollment : enrollmentList) {
+                    if (enrollment.getProgram().equals(temp)) {
+                        enrollment.setProgram(_project.getName());
+                        EnrollmentHome.update(enrollment);
+                    }
+                }
+            }
+            ProjectHome.update( _project );
+            addInfo( INFO_PROJECT_UPDATED, getLocale(  ) );
+            return redirectView( request, VIEW_MANAGE_PROJECTS );
         } else {
           addInfo( INFO_SIZE_IS_SMALL, getLocale( ) );
           return redirect( request, VIEW_MODIFY_PROJECT, PARAMETER_ID_PROJECT, _project.getId( ) );
