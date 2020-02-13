@@ -139,7 +139,7 @@ public class Project implements Serializable
         return (_active==1 && hasRoom());
     }
 
-    public boolean isFull() { return _currentsize >= _size && _size != 0; }
+    public boolean atCapacity() { return _currentsize == _size && _size != 0; }
 
     @Override
     public boolean equals(Object o) {

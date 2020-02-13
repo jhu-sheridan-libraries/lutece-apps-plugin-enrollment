@@ -284,7 +284,7 @@ public class ProjectJspBean extends ManageEnrollJspBean
         }
 
         //now check to see if size constraints are ok
-        if ( _project.hasRoom() || _project.isFull() ) {
+        if ( _project.hasRoom() || _project.atCapacity() ) {
           ProjectHome.update( _project );
           addInfo( INFO_PROJECT_UPDATED, getLocale(  ) );
           return redirectView( request, VIEW_MANAGE_PROJECTS );

@@ -57,7 +57,7 @@ public class EnrollmentXPage extends MVCApplication {
                     model.put("success", true);
                 } else {
                     model.put("inactive", project.getActive()==0);
-                    model.put( "full", project.isFull());
+                    model.put( "full", project.atCapacity());
               }
               break;
           }
