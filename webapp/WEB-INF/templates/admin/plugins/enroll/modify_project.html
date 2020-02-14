@@ -1,9 +1,8 @@
 <#include "manageenroll_tabs.html" />
 
 <@boxHeader i18nTitleKey="enroll.modify_project.pageTitle" />
-<@messages infos=infos />
+<@messages infos=infos warnings=warnings errors=errors/>
 <@tform name="modify_project" action="jsp/admin/plugins/enroll/ManageProjects.jsp">
-    <@messages errors=errors />
     <input type="hidden" id="id" name="id" value="${project.id}"/>
     <@formGroup labelFor='name' labelKey='#i18n{enroll.modify_project.labelName}' helpKey='#i18n{enroll.modify_project.labelName.help}' mandatory=true>
         <@input  type='text' name='name' maxlength=50 value="${project.name}"/>

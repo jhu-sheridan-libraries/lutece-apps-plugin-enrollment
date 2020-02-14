@@ -2,8 +2,8 @@
 <@tabs tab="enrollment" />
 
 <@boxHeader i18nTitleKey="enroll.modify_enrollment.title"/>
+<@messages infos=infos warnings=warnings  errors=errors />
 <@tform class="form-horizontal" method="post" name="modify_enrollment" action="jsp/admin/plugins/enroll/ManageEnrollments.jsp">
-    <@messages errors=errors />
     <input type="hidden" id="projectId" name="projectId" value="${project.id}"/>
     <input type="hidden" id="program" name="program" value="${project.name}"/>
     <@formGroup labelFor="name" labelKey='#i18n{enroll.modify_enrollment.labelName}' helpKey='#i18n{enroll.modify_enrollment.labelName.help}' mandatory=true>

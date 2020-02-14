@@ -2,14 +2,12 @@
     <@columns>
         <@box>
             <@boxHeader i18nTitleKey="enroll.manage_projects.title"/>
-
+            <@messages infos=infos  warnings=warnings errors=errors/>
                 <@tform class="form-inline pull-right" action="jsp/admin/plugins/enroll/ManageProjects.jsp" method="post" name="manage_projects" >
                     <!-- Add pull-right to class1 -->
                     <@actionButtons button1Name="view_createProject" icon1="icon-plus icon-white" i18nValue1Key="enroll.manage_projects.buttonAdd" />
                 </@tform>
-
             <@boxBody>
-            <@messages infos=infos />
             <@paginationAdmin paginator=paginator combo=1 />
 
             <@table>

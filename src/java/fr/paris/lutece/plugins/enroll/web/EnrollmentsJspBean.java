@@ -82,6 +82,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     private static final String INFO_PROJECT_INACTIVE = "enroll.info.project.inactive";
     private static final String INFO_PROJECT_FULL = "enroll.info.project.full";
     private static final String INFO_PROJECT_UPDATED = "enroll.info.project.updated";
+    private static final String INFO_INCREASE_SIZE = "enroll.info.project.increase";
 
     // Session variable to store working values
     private Enrollment _enrollment = null;
@@ -242,6 +243,16 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     {
         int projectId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
         Project project = ProjectHome.findByPrimaryKey( projectId );
+        if ( !project.canAdd() ) {
+            if ( !project.hasRoom() ) {
+                addWarning( INFO_PROJECT_FULL, getLocale() );
+                addWarning( INFO_INCREASE_SIZE, getLocale() );
+            }
+            if ( project.getActive()!=1 ) {
+                addWarning( INFO_PROJECT_INACTIVE );
+            }
+            return redirect( request, VIEW_MANAGE_ENROLLMENTS, PARAMETER_ID_PROJECT, projectId);
+        }
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_PROJECT, project );
@@ -276,12 +287,12 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
                 addInfo(INFO_ENROLLMENT_CREATED, getLocale());
                 addInfo(INFO_PROJECT_UPDATED, getLocale());
             } else {
-                addInfo( INFO_ENROLLMENT_FAILED, getLocale() );
+                addWarning ( INFO_ENROLLMENT_FAILED, getLocale() );
                 if ( project.getActive() != 1) {
-                    addInfo ( INFO_PROJECT_INACTIVE, getLocale());
+                    addWarning ( INFO_PROJECT_INACTIVE, getLocale() );
                 }
                 if ( !project.hasRoom()) {
-                    addInfo(INFO_PROJECT_FULL, getLocale());
+                    addWarning ( INFO_PROJECT_FULL, getLocale() );
                 }
             }
 

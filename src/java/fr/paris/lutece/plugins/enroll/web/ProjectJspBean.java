@@ -277,7 +277,7 @@ public class ProjectJspBean extends ManageEnrollJspBean
             for ( Project project : listProjects )
             {
                 if (project.getName().equals(_project.getName())) {
-                    addInfo( INFO_PROJECT_SAME_NAME, getLocale(  ) );
+                    addWarning( INFO_PROJECT_SAME_NAME, getLocale(  ) );
                     return redirectView( request, VIEW_MANAGE_PROJECTS );
                 }
             }
@@ -299,7 +299,7 @@ public class ProjectJspBean extends ManageEnrollJspBean
             addInfo( INFO_PROJECT_UPDATED, getLocale(  ) );
             return redirectView( request, VIEW_MANAGE_PROJECTS );
         } else {
-          addInfo( INFO_SIZE_IS_SMALL, getLocale( ) );
+          addWarning( INFO_SIZE_IS_SMALL, getLocale( ) );
           return redirect( request, VIEW_MODIFY_PROJECT, PARAMETER_ID_PROJECT, _project.getId( ) );
         }
     }

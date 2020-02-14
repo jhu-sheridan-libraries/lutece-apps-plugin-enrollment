@@ -1,7 +1,7 @@
 <div class="row" >
     <div class="col-sm-12">
 
-        <@messages infos=infos />
+        <@messages infos=infos warnings=warnings errors=errors/>
 
         <form method="post"  action="jsp/admin/plugins/enroll//ManageEnrollments.jsp?view=addEnrollmentToProject&projectId=${project}">
             <button name="view_createEnrollment" class="btn btn-primary pull-right" type="submit">
