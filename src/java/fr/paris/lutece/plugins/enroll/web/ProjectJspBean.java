@@ -136,7 +136,7 @@ public class ProjectJspBean extends ManageEnrollJspBean
         for ( Project project : listProjects )
         {
           if (project.getName().equals(_project.getName())) {
-            addInfo( INFO_PROJECT_SAME_NAME, getLocale(  ) );
+            addWarning( INFO_PROJECT_SAME_NAME, getLocale(  ) );
             return redirectView( request, VIEW_MANAGE_PROJECTS );
           }
         }
