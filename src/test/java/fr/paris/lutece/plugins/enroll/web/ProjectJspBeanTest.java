@@ -28,8 +28,8 @@ import static org.mockito.ArgumentMatchers.*;
 /**
  * Test class to exercise the ProjectJspBean
  *
- * Note: we mock the bean to mask an NPE which results from the redirectView() method - we don't care about the return value
- * in methods using this, jsut the before and after states of hte database when exercising the action methods
+ * Note: we mock the bean to mask an NPE which results from the redirectView() and redirect() methods - we don't care about the return value
+ * in methods using this, just the before and after states of the database when exercising the action methods
  */
 public class ProjectJspBeanTest extends LuteceTestCase {
 
@@ -157,7 +157,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
         underTest.doModifyProject(request);
 
         Project processedProject = ProjectHome.findByPrimaryKey(storedProject.getId());
-        assertEquals("Test Project", processedProject.getName());
+        assertEquals("Test Project", processedProject.getName());//update did not happen
         assertEquals( 2, processedProject.getSize());
 
         listener.requestDestroyed( new ServletRequestEvent( context, request ) );
@@ -189,7 +189,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
         underTest.doModifyProject(request);
 
         Project processedProject = ProjectHome.findByPrimaryKey(storedProject.getId());
-        assertEquals("Test Project", processedProject.getName());
+        assertEquals("Test Project", processedProject.getName());//update did not happen
         assertEquals( 2, processedProject.getSize());
 
         listener.requestDestroyed( new ServletRequestEvent( context, request ) );
