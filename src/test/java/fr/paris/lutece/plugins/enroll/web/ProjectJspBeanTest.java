@@ -1,10 +1,13 @@
 package fr.paris.lutece.plugins.enroll.web;
 
+import fr.paris.lutece.plugins.enroll.business.enrollment.Enrollment;
+import fr.paris.lutece.plugins.enroll.business.enrollment.EnrollmentHome;
 import fr.paris.lutece.plugins.enroll.business.project.Project;
 import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.test.LuteceTestCase;
 
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -20,41 +23,48 @@ import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_SIZE_P
 import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_CURRENTSIZE_PROJECT;
 import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_STATUS_PROJECT;
 import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.PARAMETER_ID_PROJECT;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 
+/**
+ * Test class to exercise the ProjectJspBean
+ *
+ * Note: we mock the bean to mask an NPE which results from the redirectView() method - we don't care about the return value
+ * in methods using this, jsut the before and after states of hte database when exercising the action methods
+ */
 public class ProjectJspBeanTest extends LuteceTestCase {
 
     RequestContextListener listener = new RequestContextListener();
     ServletContext context = new MockServletContext();
+    MockHttpServletRequest request;
 
-    public void testBusiness() {
+    ProjectJspBean instance = SpringContextService.getBean( "enroll.ProjectJspBean" );
+    ProjectJspBean underTest = Mockito.spy( instance );
 
-        String name = "Test Project";
+    /**
+     * Test that if we create a project through the bean, that it shows up correctly in the database
+     */
+    @Test
+    public void testCreateProject() {
+        String name = "Created Project";
         String size = "20";
-        int newProjectId;
 
         MockHttpServletRequest request = new MockHttpServletRequest( );
 
         //test create project
-        request.addParameter( PARAMETER_NAME_PROJECT, name );
-        request.addParameter( PARAMETER_SIZE_PROJECT, size );
-        request.addParameter( PARAMETER_CURRENTSIZE_PROJECT, "" );
-        request.addParameter( PARAMETER_STATUS_PROJECT, "" );
-        request.addParameter(PARAMETER_ID_PROJECT, "" );
+        request.addParameter(PARAMETER_NAME_PROJECT, name);
+        request.addParameter(PARAMETER_SIZE_PROJECT, size);
+        request.addParameter(PARAMETER_CURRENTSIZE_PROJECT, "");
+        request.addParameter(PARAMETER_STATUS_PROJECT, "");
+        request.addParameter(PARAMETER_ID_PROJECT, "");
 
         List<Project> projectList = ProjectHome.getProjectsList();
         //project id is the database row number
-        newProjectId = projectList.size() + 1; //one more than the last existing project id
+        int newProjectId = projectList.size() + 1; //one more than the last existing project id
 
-        listener.requestInitialized( new ServletRequestEvent( context, request ) );
+        listener.requestInitialized(new ServletRequestEvent(context, request));
+        Mockito.doReturn("Return value not needed - ignored").when(underTest).redirectView(any(), anyString());
 
-        ProjectJspBean instance = SpringContextService.getBean( "enroll.ProjectJspBean" );
-        //mock this method called in the return - we don't need it, and it gives NPE if invoked here
-        ProjectJspBean instance1 = Mockito.spy( instance );
-        Mockito.doReturn("Return value not needed - ignored").when(instance1).redirectView( any(), anyString() );
-
-        instance1.doCreateProject(request);
+        underTest.doCreateProject(request);
 
         //at this point this project should be in the database - let's look for it
         //currentsize should initialize to 0; active to 1; id is assigned upon creation,
@@ -62,48 +72,168 @@ public class ProjectJspBeanTest extends LuteceTestCase {
         projectList = ProjectHome.getProjectsList();
 
         // this should be the project we just added
-        Project latestProject = projectList.get(newProjectId-1);
+        Project createdProject = projectList.get(newProjectId - 1);
 
-        assertEquals( name, latestProject.getName() );
-        assertEquals( size, Integer.toString(latestProject.getSize()) );
-        assertEquals( 1, latestProject.getActive() );
-        assertEquals( 0, latestProject.getCurrentSize() );
-        assertEquals( newProjectId,  latestProject.getId() );
+        assertEquals(name, createdProject.getName());
+        assertEquals(size, Integer.toString(createdProject.getSize()));
+        assertEquals(1, createdProject.getActive());
+        assertEquals(0, createdProject.getCurrentSize());
+        assertEquals(newProjectId, createdProject.getId());
 
-        // test that changing status works
-        request = new MockHttpServletRequest();
-        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(newProjectId));
-
-        instance1.doChangeProjectStatus(request);
-        latestProject = ProjectHome.findByPrimaryKey(newProjectId);
-        assertEquals(0, latestProject.getActive());
-
-        instance1.doChangeProjectStatus(request);
-        latestProject = ProjectHome.findByPrimaryKey(newProjectId);
-        assertEquals(1, latestProject.getActive());
-
-        //test modification of enrollment
-        Project modifiedProject = new Project();
-        modifiedProject.setName("New Project");
-        modifiedProject.setSize(20);
-        modifiedProject.setId(latestProject.getId());
-
-        request = new MockHttpServletRequest();
-        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(modifiedProject.getId()));
-        request.addParameter(PARAMETER_NAME_PROJECT, modifiedProject.getName());
-        request.addParameter(PARAMETER_SIZE_PROJECT, String.valueOf(modifiedProject.getSize()));
-
-        instance1.doModifyProject(request);
-        latestProject = ProjectHome.findByPrimaryKey(newProjectId);
-        assertEquals(modifiedProject.getName(), latestProject.getName());
-        assertEquals(modifiedProject.getSize(), latestProject.getSize());
-
-        //test removal
-        request = new MockHttpServletRequest();
-        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(modifiedProject.getId()));
-        instance1.doRemoveProject(request);
-        assertNull(ProjectHome.findByPrimaryKey(modifiedProject.getId()));
 
         listener.requestDestroyed( new ServletRequestEvent( context, request ) );
     }
+
+    /**
+     * test that flipping a project's status through the bean works as advertised
+     */
+    @Test
+    public void testChangeProjectStatus() {
+        int initialProjectId = ProjectHome.update(reset()).getId();
+
+        request = new MockHttpServletRequest();
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(initialProjectId));
+
+        listener.requestInitialized(new ServletRequestEvent(context, request));
+        Mockito.doReturn("Return value not needed - ignored").when(underTest).redirectView(any(), anyString());
+
+        underTest.doChangeProjectStatus(request);
+        Project projectToChangeStatus = ProjectHome.findByPrimaryKey(initialProjectId);
+        assertEquals(0, projectToChangeStatus.getActive());
+
+        underTest.doChangeProjectStatus(request);
+        projectToChangeStatus = ProjectHome.findByPrimaryKey(initialProjectId);
+        assertEquals(1, projectToChangeStatus.getActive());
+
+        listener.requestDestroyed( new ServletRequestEvent( context, request ) );
+    }
+
+    /**
+     * test that we can modify the size and/or name of a project when constraints are met
+     */
+    @Test
+    public void testModifyProject() {
+        Project storedProject = ProjectHome.update(reset());
+
+        request = new MockHttpServletRequest();
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(storedProject.getId()));
+        request.addParameter(PARAMETER_NAME_PROJECT, "Modified Project");
+        request.addParameter(PARAMETER_SIZE_PROJECT, "20");
+
+        listener.requestInitialized(new ServletRequestEvent(context, request));
+        Mockito.doReturn("Return value not needed - ignored").when(underTest).redirectView(any(), anyString());
+
+        underTest.doModifyProject(request);
+
+        Project processedProject = ProjectHome.findByPrimaryKey(storedProject.getId());
+        assertEquals("Modified Project", processedProject.getName());
+        assertEquals( 20, processedProject.getSize());
+
+        listener.requestDestroyed( new ServletRequestEvent( context, request ) );
+    }
+
+    /**
+     * test that we can not modify the size of a project when the proposed size is too small
+     */
+    @Test
+    public void testModifyProjectTooSmall() {
+        Project storedProject = ProjectHome.update(reset());
+
+        // modify stored project to have a current size of 2
+
+        Project project = ProjectHome.findByPrimaryKey(storedProject.getId());
+        project.setCurrentSize(2);
+        ProjectHome.update(project);
+
+        //now try to set the project's size to 1
+        request = new MockHttpServletRequest();
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(storedProject.getId()));
+        request.addParameter(PARAMETER_NAME_PROJECT, "Modified Project");
+        request.addParameter(PARAMETER_SIZE_PROJECT, "1");
+
+        listener.requestInitialized(new ServletRequestEvent(context, request));
+        Mockito.doReturn("Return value not needed - ignored").when(underTest).redirectView(any(), anyString());
+        Mockito.doReturn("Return value not needed - ignored").when(underTest).redirect(any(), anyString(), anyString(), anyInt());
+        underTest.doModifyProject(request);
+
+        Project processedProject = ProjectHome.findByPrimaryKey(storedProject.getId());
+        assertEquals("Test Project", processedProject.getName());
+        assertEquals( 2, processedProject.getSize());
+
+        listener.requestDestroyed( new ServletRequestEvent( context, request ) );
+    }
+
+    /**
+     * test that we can not modify the size and/or name of a project when the proposed project name
+     * is already in use
+     */
+    @Test
+    public void testModifyProjectSameName() {
+        Project storedProject = ProjectHome.update(reset());
+
+        Project existingProject = new Project();
+        existingProject.setName("Cool Project");
+        existingProject.setSize(20);
+
+        ProjectHome.create(existingProject);
+
+        //now try to set the project's size to 1
+        request = new MockHttpServletRequest();
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(storedProject.getId()));
+        request.addParameter(PARAMETER_NAME_PROJECT, "Cool Project");
+        request.addParameter(PARAMETER_SIZE_PROJECT, "20");
+
+        listener.requestInitialized(new ServletRequestEvent(context, request));
+        Mockito.doReturn("Return value not needed - ignored").when(underTest).redirectView(any(), anyString());
+        Mockito.doReturn("Return value not needed - ignored").when(underTest).redirect(any(), anyString(), anyString(), anyInt());
+        underTest.doModifyProject(request);
+
+        Project processedProject = ProjectHome.findByPrimaryKey(storedProject.getId());
+        assertEquals("Test Project", processedProject.getName());
+        assertEquals( 2, processedProject.getSize());
+
+        listener.requestDestroyed( new ServletRequestEvent( context, request ) );
+    }
+
+    /**
+     * test that we can remove an existing project
+     */
+    @Test
+    public void testRemoveProject() {
+        Project removeProject = new Project();
+        removeProject.setName("Remove Project Name");
+        removeProject.setSize(30);
+
+        Project processedProject = ProjectHome.create(removeProject);
+        assertEquals(removeProject.getName(), processedProject.getName());
+
+        request = new MockHttpServletRequest();
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(String.valueOf(removeProject.getId())));
+
+        listener.requestInitialized(new ServletRequestEvent(context, request));
+        Mockito.doReturn("Return value not needed - ignored").when(underTest).redirectView(any(), anyString());
+        underTest.doRemoveProject(request);
+        assertNull(ProjectHome.findByPrimaryKey(processedProject.getId()));
+
+        listener.requestDestroyed( new ServletRequestEvent( context, request ) );
+    }
+
+    /**
+     * private convenience method to simplify database state. returns a fresh project
+     * with reliable field values and a reset database
+     * @return the project created
+     */
+    private Project reset() {
+        for (Project project : ProjectHome.getProjectsList()) {
+            ProjectHome.remove(project.getId());
+        }
+        for (Enrollment enrollment : EnrollmentHome.getEnrollmentsList()) {
+            EnrollmentHome.remove(enrollment.getId());
+        }
+        Project project = new Project();
+        project.setName("Test Project");
+        project.setSize(2);
+        return ProjectHome.create(project);
+    }
+
 }

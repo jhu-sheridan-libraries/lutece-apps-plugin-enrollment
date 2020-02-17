@@ -260,8 +260,9 @@ public class ProjectJspBean extends ManageEnrollJspBean
     @Action( ACTION_MODIFY_PROJECT )
     public String doModifyProject( HttpServletRequest request )
     {
-        int tempSize = _project.getSize();
-        int tempActive = _project.getActive();
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
+        _project = ProjectHome.findByPrimaryKey( nId );
+
         String temp = _project.getName();
         populate( _project, request );
 
@@ -308,5 +309,10 @@ public class ProjectJspBean extends ManageEnrollJspBean
     @Override
     protected String redirectView( HttpServletRequest request, String strView ) {
         return super.redirectView( request, strView );
+    }
+
+    @Override
+    protected String redirect(HttpServletRequest request, String strView, String strParameter, int nValue) {
+        return  super.redirect(request, strView, strParameter, nValue);
     }
 }
