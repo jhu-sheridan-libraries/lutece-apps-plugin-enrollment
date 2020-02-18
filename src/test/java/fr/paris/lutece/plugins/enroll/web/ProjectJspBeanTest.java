@@ -196,6 +196,42 @@ public class ProjectJspBeanTest extends LuteceTestCase {
     }
 
     /**
+     * test that when can modify a project's name, its enrollments are updated
+     */
+    @Test
+    public void testModifyProjectNameModifiesAssociatedEnrollments() {
+        Project storedProject = ProjectHome.update(reset());
+
+        Enrollment enrollment = new Enrollment();
+        enrollment.setProgram( storedProject.getName() );
+        enrollment.setPhone("867-5309");
+        enrollment.setName("Amanda B. Reckondwith");
+        enrollment.setEmail("purinac@chow@pet.com");
+
+        Enrollment storedEnrollment = EnrollmentHome.create( enrollment );
+        assertNotNull( storedEnrollment );
+
+        request = new MockHttpServletRequest();
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(storedProject.getId()));
+        request.addParameter(PARAMETER_NAME_PROJECT, "Modified Project");
+        request.addParameter(PARAMETER_SIZE_PROJECT, "20");
+
+        listener.requestInitialized(new ServletRequestEvent(context, request));
+        Mockito.doReturn("Return value not needed - ignored").when(underTest).redirectView(any(), anyString());
+
+        underTest.doModifyProject(request);
+
+        Project processedProject = ProjectHome.findByPrimaryKey(storedProject.getId());
+        assertEquals("Modified Project", processedProject.getName());
+        assertEquals( 20, processedProject.getSize());
+
+        Enrollment modifiedEnrollment = EnrollmentHome.findByPrimaryKey( storedEnrollment.getId() );
+        assertNotNull ( modifiedEnrollment );
+        assertEquals(processedProject.getName(), modifiedEnrollment.getProgram());
+
+        listener.requestDestroyed( new ServletRequestEvent( context, request ) );
+    }
+    /**
      * test that we can remove an existing project
      */
     @Test
@@ -218,6 +254,34 @@ public class ProjectJspBeanTest extends LuteceTestCase {
         listener.requestDestroyed( new ServletRequestEvent( context, request ) );
     }
 
+    /**
+     * test that remove an existing project removes its asociated enrollments
+     */
+    @Test
+    public void testRemoveProjectRemovesEnrollments() {
+        Project removeProject = ProjectHome.create(reset());
+
+        String program = removeProject.getName();
+
+        Enrollment enrollment = new Enrollment();
+        enrollment.setProgram( program );
+        enrollment.setPhone("867-5309");
+        enrollment.setName("Amanda B. Reckondwith");
+        enrollment.setEmail("purinac@chow@pet.com");
+
+        Enrollment storedEnrollment = EnrollmentHome.create( enrollment );
+        assertNotNull( storedEnrollment);
+
+        request = new MockHttpServletRequest();
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(String.valueOf(removeProject.getId())));
+
+        listener.requestInitialized(new ServletRequestEvent(context, request));
+        Mockito.doReturn("Return value not needed - ignored").when(underTest).redirectView(any(), anyString());
+        underTest.doRemoveProject(request);
+        assertNull(EnrollmentHome.findByPrimaryKey(storedEnrollment.getId()));
+
+        listener.requestDestroyed( new ServletRequestEvent( context, request ) );
+    }
     /**
      * private convenience method to simplify database state. returns a fresh project
      * with reliable field values and a reset database
