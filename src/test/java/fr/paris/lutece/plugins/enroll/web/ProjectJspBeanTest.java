@@ -7,7 +7,6 @@ import fr.paris.lutece.plugins.enroll.business.project.ProjectHome;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.test.LuteceTestCase;
 
-import org.junit.Test;
 import org.mockito.Mockito;
 
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -43,7 +42,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
     /**
      * Test that if we create a project through the bean, that it shows up correctly in the database
      */
-    @Test
+    
     public void testCreateProject() {
         String name = "Created Project";
         String size = "20";
@@ -87,7 +86,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
     /**
      * test that flipping a project's status through the bean works as advertised
      */
-    @Test
+    
     public void testChangeProjectStatus() {
         int initialProjectId = ProjectHome.update(reset()).getId();
 
@@ -111,7 +110,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
     /**
      * test that we can modify the size and/or name of a project when constraints are met
      */
-    @Test
+    
     public void testModifyProject() {
         Project storedProject = ProjectHome.update(reset());
 
@@ -135,7 +134,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
     /**
      * test that we can not modify the size of a project when the proposed size is too small
      */
-    @Test
+    
     public void testModifyProjectTooSmall() {
         Project storedProject = ProjectHome.update(reset());
 
@@ -167,7 +166,6 @@ public class ProjectJspBeanTest extends LuteceTestCase {
      * test that we can not modify the size and/or name of a project when the proposed project name
      * is already in use
      */
-    @Test
     public void testModifyProjectSameName() {
         Project storedProject = ProjectHome.update(reset());
 
@@ -198,7 +196,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
     /**
      * test that when can modify a project's name, its enrollments are updated
      */
-    @Test
+    
     public void testModifyProjectNameModifiesAssociatedEnrollments() {
         Project storedProject = ProjectHome.update(reset());
 
@@ -234,7 +232,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
     /**
      * test that we can remove an existing project
      */
-    @Test
+    
     public void testRemoveProject() {
         Project removeProject = new Project();
         removeProject.setName("Remove Project Name");
@@ -244,7 +242,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
         assertEquals(removeProject.getName(), processedProject.getName());
 
         request = new MockHttpServletRequest();
-        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(String.valueOf(removeProject.getId())));
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(removeProject.getId()));
 
         listener.requestInitialized(new ServletRequestEvent(context, request));
         Mockito.doReturn("Return value not needed - ignored").when(underTest).redirectView(any(), anyString());
@@ -257,7 +255,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
     /**
      * test that remove an existing project removes its asociated enrollments
      */
-    @Test
+    
     public void testRemoveProjectRemovesEnrollments() {
         Project removeProject = ProjectHome.create(reset());
 
@@ -273,7 +271,7 @@ public class ProjectJspBeanTest extends LuteceTestCase {
         assertNotNull( storedEnrollment);
 
         request = new MockHttpServletRequest();
-        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(String.valueOf(removeProject.getId())));
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf(removeProject.getId()));
 
         listener.requestInitialized(new ServletRequestEvent(context, request));
         Mockito.doReturn("Return value not needed - ignored").when(underTest).redirectView(any(), anyString());
