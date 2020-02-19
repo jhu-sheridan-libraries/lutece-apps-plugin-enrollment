@@ -89,7 +89,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     public String getManageEnrollments( HttpServletRequest request ) {
         int projectId = Integer.parseInt(request.getParameter(PARAMETER_ID_PROJECT));
         String projectName = "";
-  
+
         Project project = ProjectHome.findByPrimaryKey(projectId);
         if (project != null) {
             projectName = project.getName();
