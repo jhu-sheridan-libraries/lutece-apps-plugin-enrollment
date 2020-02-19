@@ -125,4 +125,11 @@ public final class ProjectHome
     {
         return _dao.selectProjectsReferenceList(_plugin );
     }
+
+    /**
+     * Returns an instance of a project whose name is specified in parameter
+     * @param name The project name
+     * @return an instance of Project
+     */
+    public static Project findByName( String name ) { return _dao.selectProjectByName( name, _plugin);}
 }

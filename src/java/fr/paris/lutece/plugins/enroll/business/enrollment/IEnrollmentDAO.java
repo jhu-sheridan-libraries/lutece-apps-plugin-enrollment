@@ -58,4 +58,13 @@ public interface IEnrollmentDAO {
    * @return The referenceList which contains the data of all the enrollment objects
    */
   ReferenceList selectEnrollmentsReferenceList(Plugin plugin);
+
+  /**
+   * Load the data for all the enrollment objects with a given program and
+   * return them as a list
+   * @param program
+   * @param plugin
+   * @return The list of enrollments with the provided program, sorted by enrollment name
+   */
+  List<Enrollment> selectEnrollmentsForProgram(String program, Plugin plugin);
 }

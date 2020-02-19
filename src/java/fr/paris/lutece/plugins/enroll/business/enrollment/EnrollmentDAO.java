@@ -15,6 +15,7 @@ public final class EnrollmentDAO implements IEnrollmentDAO {
   private static final String SQL_QUERY_UPDATE = "UPDATE enroll_enrollment SET id_enrollment = ?, program = ?, name = ?, email = ?, phone = ? WHERE id_enrollment = ?";
   private static final String SQL_QUERY_SELECTALL = "SELECT * FROM enroll_enrollment";
   private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_enrollment FROM enroll_enrollment";
+  private static final String SQL_QUERY_SELECT_BY_PROGRAM = "SELECT * FROM enroll_enrollment WHERE program = ?  ORDER BY name ASC";
 
     /**
      * {@inheritDoc }
@@ -171,4 +172,32 @@ public final class EnrollmentDAO implements IEnrollmentDAO {
       daoUtil.free( );
       return enrollmentList;
   }
+
+    /**
+     *  {@inheritDoc }
+     */
+    @Override
+    public List<Enrollment> selectEnrollmentsForProgram(String program, Plugin plugin) {
+        List<Enrollment> enrollmentList = new ArrayList<>();
+          DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_PROGRAM, plugin );
+          daoUtil.setString(1, program);
+          daoUtil.executeQuery(  );
+
+          while ( daoUtil.next(  ) )
+          {
+              Enrollment enrollment = new Enrollment(  );
+              int nIndex = 1;
+
+              enrollment.setId( daoUtil.getInt( nIndex++ ) );
+              enrollment.setProgram(daoUtil.getString(nIndex++));
+              enrollment.setName( daoUtil.getString( nIndex++ ) );
+              enrollment.setEmail( daoUtil.getString( nIndex++ ) );
+              enrollment.setPhone( daoUtil.getString( nIndex ) );
+
+              enrollmentList.add( enrollment );
+          }
+
+          daoUtil.free( );
+          return enrollmentList;
+        }
 }

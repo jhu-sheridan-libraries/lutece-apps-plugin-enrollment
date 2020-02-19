@@ -10,7 +10,6 @@ import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 
 import java.util.Map;
-import java.util.List;
 import java.util.Collection;
 import fr.paris.lutece.util.ReferenceList;
 import java.util.HashMap;
@@ -32,37 +31,35 @@ public class EnrollmentXPage extends MVCApplication {
   private static final String VIEW_CREATE_ENROLLMENT = "createEnrollment";
   private static final String ACTION_CREATE_ENROLLMENT = "createEnrollment";
 
-  private Enrollment _enrollment;
 
   @Action( ACTION_CREATE_ENROLLMENT )
   public XPage doCreateEnrollment( HttpServletRequest request )  {
-      _enrollment = new Enrollment(  );
-      populate( _enrollment, request );
+      Enrollment enrollment = new Enrollment(  );
+      populate( enrollment, request );
 
       // Check constraints
-      if ( !validateBean( _enrollment, getLocale( request ) ) )
+      if ( !validateBean( enrollment, getLocale( request ) ) )
       {
           return redirectView( request, VIEW_CREATE_ENROLLMENT );
       }
 
       Map<String, Object> model = getModel();
-      List<Project> listProjects = ProjectHome.getProjectsList();
 
-      for (Project project : listProjects) {
-          if (project.getName().equals(_enrollment.getProgram())) {
-              if ( project.canAdd() ) {
-                    EnrollmentHome.create(_enrollment);
-                    project.setCurrentSize(project.getCurrentSize() + 1);
-                    ProjectHome.update(project);
-                    model.put("success", true);
-                } else {
-                    model.put("inactive", project.getActive()==0);
-                    model.put( "full", project.atCapacity());
-              }
-              break;
+      Project project = ProjectHome.findByName( enrollment.getProgram() );
+
+      if ( project != null ) {
+          if ( project.canAdd() ) {
+                EnrollmentHome.create( enrollment );
+                project.setCurrentSize( project.getCurrentSize() + 1 );
+                ProjectHome.update(project);
+                model.put("success", true);
+            } else {
+                model.put("inactive", project.getActive()==0);
+                model.put( "full", project.atCapacity());
           }
       }
-      return getXPage( TEMPLATE_ENROLLMENT_RESULT, request.getLocale(), model);
+
+      return getXPage( TEMPLATE_ENROLLMENT_RESULT, request.getLocale(), model );
   }
 
   /**

@@ -34,6 +34,7 @@
 
 package fr.paris.lutece.plugins.enroll.business.project;
 
+import fr.paris.lutece.plugins.enroll.business.enrollment.Enrollment;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import java.util.List;
@@ -95,4 +96,12 @@ public interface IProjectDAO
      * @return The referenceList which contains the data of all the project objects
      */
     ReferenceList selectProjectsReferenceList( Plugin plugin );
+
+    /**
+     * Load the data for all the project objects with a given name and
+     * return it
+     * @param plugin
+     * @return The project with the provided name
+     */
+    Project selectProjectByName(String name, Plugin plugin);
 }

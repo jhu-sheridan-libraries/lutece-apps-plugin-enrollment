@@ -54,6 +54,7 @@ public final class ProjectDAO implements IProjectDAO
     private static final String SQL_QUERY_UPDATE = "UPDATE enroll_project SET id_project = ?, name = ?, size = ?, currentsize = ?, active = ? WHERE id_project = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT id_project, name, size, currentsize, active FROM enroll_project";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_project FROM enroll_project";
+    private static final String SQL_QUERY_SELECT_BY_NAME = "SELECT id_project, name, size, currentsize, active FROM enroll_project WHERE name = ?";
 
     /**
      * Generates a new primary key
@@ -220,5 +221,31 @@ public final class ProjectDAO implements IProjectDAO
 
         daoUtil.free( );
         return projectList;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public Project selectProjectByName(String name, Plugin plugin) {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_NAME, plugin );
+        daoUtil.setString( 1 , name );
+        daoUtil.executeQuery( );
+        Project project = null;
+
+        if ( daoUtil.next( ) )
+        {
+            project = new Project();
+            int nIndex = 1;
+
+            project.setId( daoUtil.getInt( nIndex++ ) );
+            project.setName( daoUtil.getString( nIndex++ ) );
+            project.setSize( daoUtil.getInt( nIndex++ ) );
+            project.setCurrentSize( daoUtil.getInt( nIndex++ ));
+            project.setActive( daoUtil.getInt( nIndex ) );
+        }
+
+        daoUtil.free( );
+        return project;
     }
 }

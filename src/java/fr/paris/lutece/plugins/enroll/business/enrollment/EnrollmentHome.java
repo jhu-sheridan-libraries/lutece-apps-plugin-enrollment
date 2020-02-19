@@ -81,4 +81,12 @@ public final class EnrollmentHome {
   public static ReferenceList getEnrollmentsReferenceList() {
     return _dao.selectEnrollmentsReferenceList(_plugin);
   }
+
+  /**
+   * Load the data of all enrollments for a program and returns them as a list of enrollments sorted by name
+   * @return the list of enrollments sorted by name
+   */
+  public static List<Enrollment> getEnrollmentsForProgram(String program) {
+    return _dao.selectEnrollmentsForProgram(program, _plugin);
+  }
 }

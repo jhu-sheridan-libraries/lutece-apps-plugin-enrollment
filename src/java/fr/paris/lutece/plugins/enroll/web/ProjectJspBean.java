@@ -15,7 +15,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.util.List;
-import java.util.Collection;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
@@ -78,9 +77,6 @@ public class ProjectJspBean extends ManageEnrollJspBean
     private static final String INFO_PROJECT_SAME_NAME = "enroll.info.project.samename";
     private static final String INFO_EMAILS_COPIED = "enroll.info.project.emailscopied";
 
-    // Session variable to store working values
-    private Project _project;
-
     /**
      * Build the Manage View
      * @param request The HTTP request
@@ -89,7 +85,6 @@ public class ProjectJspBean extends ManageEnrollJspBean
     @View( value = VIEW_MANAGE_PROJECTS, defaultView = true )
     public String getManageProjects( HttpServletRequest request )
     {
-        //_project = null;
         List<Project> listProjects = ProjectHome.getProjectsList(  );
         Map<String, Object> model = getPaginatedListModel( request, MARK_PROJECT_LIST, listProjects, JSP_MANAGE_PROJECTS );
 
@@ -105,10 +100,10 @@ public class ProjectJspBean extends ManageEnrollJspBean
     @View( VIEW_CREATE_PROJECT )
     public String getCreateProject( HttpServletRequest request )
     {
-        _project = new Project();
+        Project project = new Project();
 
         Map<String, Object> model = getModel(  );
-        model.put( MARK_PROJECT, _project );
+        model.put( MARK_PROJECT, project );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_PROJECT, TEMPLATE_CREATE_PROJECT, model );
     }
@@ -122,26 +117,22 @@ public class ProjectJspBean extends ManageEnrollJspBean
     @Action( ACTION_CREATE_PROJECT )
     public String doCreateProject( HttpServletRequest request )
     {
-
-        _project = new Project();
-
-        populate( _project, request );
+        Project project = new Project();
+        populate( project, request );
 
         // Check constraints
-        if ( !validateBean( _project, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if ( !validateBean( project, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
             return redirectView( request, VIEW_CREATE_PROJECT );
         }
-        Collection<Project> listProjects = ProjectHome.getProjectsList( );
-        for ( Project project : listProjects )
-        {
-          if (project.getName().equals(_project.getName())) {
+
+        //can't add a project if name is already in use
+        if (ProjectHome.findByName(project.getName()) != null ){
             addWarning( INFO_PROJECT_SAME_NAME, getLocale(  ) );
             return redirectView( request, VIEW_MANAGE_PROJECTS );
-          }
         }
 
-        ProjectHome.create( _project );
+        ProjectHome.create( project );
         addInfo( INFO_PROJECT_CREATED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_PROJECTS );
@@ -150,17 +141,19 @@ public class ProjectJspBean extends ManageEnrollJspBean
     @Action( ACTION_CHANGE_STATUS )
     public String doChangeProjectStatus( HttpServletRequest request )
     {
-      String strIdProject = request.getParameter( PARAMETER_ID_PROJECT );
-      int nIdProject = Integer.parseInt( strIdProject );
-      Project project = ProjectHome.findByPrimaryKey( nIdProject );
-      if (project.getActive() == 0 && !project.hasRoom() ) {
-        addInfo( INFO_INCREASE_SIZE, getLocale(  ) );
-        return redirectView( request, VIEW_MANAGE_PROJECTS );
-      }
-      project.flipActive();
-      ProjectHome.update( project );
+        String strIdProject = request.getParameter( PARAMETER_ID_PROJECT );
+        int nIdProject = Integer.parseInt( strIdProject );
+        Project project = ProjectHome.findByPrimaryKey( nIdProject );
 
-      return redirectView( request, VIEW_MANAGE_PROJECTS );
+        if (project.getActive() == 0 && !project.hasRoom() ) {
+            addInfo( INFO_INCREASE_SIZE, getLocale(  ) );
+            return redirectView( request, VIEW_MANAGE_PROJECTS );
+        }
+
+        project.flipActive();
+        ProjectHome.update( project );
+
+        return redirectView( request, VIEW_MANAGE_PROJECTS );
     }
 
     /**
@@ -176,9 +169,7 @@ public class ProjectJspBean extends ManageEnrollJspBean
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_PROJECT ) );
         url.addParameter( PARAMETER_ID_PROJECT, nId );
-
         String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_PROJECT, url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
-
 
         return redirect( request, strMessageUrl );
     }
@@ -187,23 +178,19 @@ public class ProjectJspBean extends ManageEnrollJspBean
     public String copyEmails( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
-
-        String _projectName = ProjectHome.findByPrimaryKey(nId).getName();
+        String projectName = ProjectHome.findByPrimaryKey(nId).getName();
         String result = "";
 
-        List<Enrollment> listEnrollments = EnrollmentHome.getEnrollmentsList(  );
-        for (Enrollment enrollment : listEnrollments) {
-          if (enrollment.getProgram().equals(_projectName)) {
+        for (Enrollment enrollment : EnrollmentHome.getEnrollmentsForProgram(projectName)) {
             result = result + enrollment.getEmail() + ", ";
-          }
         }
+
         if (result.length() > 0) {
           result = result.substring(0, result.length()-2);
         }
 
         Map<String, Object> model = getModel(  );
         model.put( PARAMETER_EMAILS , result );
-
         addInfo(INFO_EMAILS_COPIED, getLocale());
 
         return getPage( " ", TEMPLATE_EMAIL_ALL, model );
@@ -219,13 +206,15 @@ public class ProjectJspBean extends ManageEnrollJspBean
     public String doRemoveProject( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
-        String _projectName = ProjectHome.findByPrimaryKey(nId).getName();
-        List<Enrollment> listEnrollments = EnrollmentHome.getEnrollmentsList(  );
-        for (Enrollment listEnrollment : listEnrollments) {
-            if (listEnrollment.getProgram().equals(_projectName)) {
-                EnrollmentHome.remove(listEnrollment.getId());
+        Project project = ProjectHome.findByPrimaryKey(nId);
+
+        if ( project != null) {
+            //remove all the enrollments for this project
+            for (Enrollment enrollment : EnrollmentHome.getEnrollmentsForProgram(project.getName())) {
+                EnrollmentHome.remove(enrollment.getId());
             }
         }
+
         ProjectHome.remove( nId );
         addInfo( INFO_PROJECT_REMOVED, getLocale( ) );
 
@@ -243,10 +232,10 @@ public class ProjectJspBean extends ManageEnrollJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
 
-        _project = ProjectHome.findByPrimaryKey( nId );
+        Project project = ProjectHome.findByPrimaryKey( nId );
 
         Map<String, Object> model = getModel(  );
-        model.put( MARK_PROJECT, _project );
+        model.put( MARK_PROJECT, project );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_PROJECT, TEMPLATE_MODIFY_PROJECT, model );
     }
@@ -258,61 +247,55 @@ public class ProjectJspBean extends ManageEnrollJspBean
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_MODIFY_PROJECT )
-    public String doModifyProject( HttpServletRequest request )
-    {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
-        _project = ProjectHome.findByPrimaryKey( nId );
+    public String doModifyProject( HttpServletRequest request ) {
+        int nId = Integer.parseInt(request.getParameter(PARAMETER_ID_PROJECT));
+        Project project = ProjectHome.findByPrimaryKey(nId);
 
-        String temp = _project.getName();
-        populate( _project, request );
+        if ( project != null ) {
+            String existingName = project.getName();
+            populate( project, request );
 
-        // Check constraints
-        if ( !validateBean( _project, VALIDATION_ATTRIBUTES_PREFIX ) )
-        {
-            return redirect( request, VIEW_MODIFY_PROJECT, PARAMETER_ID_PROJECT, _project.getId( ) );
-        }
+            // Check constraints
+            if ( !validateBean(project, VALIDATION_ATTRIBUTES_PREFIX) ) {
+                return redirect( request, VIEW_MODIFY_PROJECT, PARAMETER_ID_PROJECT, project.getId() );
+            }
 
-        //first check to see if a name change is valid - cannot have two with the same name
-        if (!(temp.equals(_project.getName()))) {
-            Collection<Project> listProjects = ProjectHome.getProjectsList( );
-            for ( Project project : listProjects )
-            {
-                if (project.getName().equals(_project.getName())) {
-                    addWarning( INFO_PROJECT_SAME_NAME, getLocale(  ) );
-                    return redirectView( request, VIEW_MANAGE_PROJECTS );
+            //first check to see if a name change is valid - cannot have two with the same name
+            if ( !(existingName.equals( project.getName() ) ) ) {
+                if (ProjectHome.findByName(project.getName()) != null) {
+                    addWarning( INFO_PROJECT_SAME_NAME, getLocale() );
+                    return redirectView(request, VIEW_MANAGE_PROJECTS);
                 }
             }
-        }
 
-        //now check to see if size constraints are ok - if so, change is ok
-        if ( _project.hasRoom() || _project.atCapacity() ) {
-            //if there was a project name change, update project enrollments
-            if(!(temp.equals(_project.getName()))) {
-                List<Enrollment> enrollmentList = EnrollmentHome.getEnrollmentsList();
-                for (Enrollment enrollment : enrollmentList) {
-                    if (enrollment.getProgram().equals(temp)) {
-                        enrollment.setProgram(_project.getName());
-                        EnrollmentHome.update(enrollment);
+            //now check to see if size constraints are ok - if so, change is ok
+            if ( project.hasRoom() || project.atCapacity() ) {
+                //if there was a project name change, update project enrollments
+                if ( !(existingName.equals( project.getName() ) ) ) {
+                    for ( Enrollment enrollment : EnrollmentHome.getEnrollmentsForProgram( existingName ) ) {
+                        enrollment.setProgram( project.getName() );
+                        EnrollmentHome.update( enrollment );
                     }
                 }
+                ProjectHome.update(project);
+                addInfo( INFO_PROJECT_UPDATED, getLocale() );
+                return redirectView(request, VIEW_MANAGE_PROJECTS);
+            } else {
+                addWarning( INFO_SIZE_IS_SMALL, getLocale() );
+                return redirect( request, VIEW_MODIFY_PROJECT, PARAMETER_ID_PROJECT, project.getId() );
             }
-            ProjectHome.update( _project );
-            addInfo( INFO_PROJECT_UPDATED, getLocale(  ) );
-            return redirectView( request, VIEW_MANAGE_PROJECTS );
-        } else {
-          addWarning( INFO_SIZE_IS_SMALL, getLocale( ) );
-          return redirect( request, VIEW_MODIFY_PROJECT, PARAMETER_ID_PROJECT, _project.getId( ) );
         }
+        return redirectView(request, VIEW_MANAGE_PROJECTS);
     }
 
-    // override here changes access, allows us to mock this method in tests
+    // override here changes access, allows us to mock these methods in tests
     @Override
     protected String redirectView( HttpServletRequest request, String strView ) {
         return super.redirectView( request, strView );
     }
 
     @Override
-    protected String redirect(HttpServletRequest request, String strView, String strParameter, int nValue) {
-        return  super.redirect(request, strView, strParameter, nValue);
+    protected String redirect( HttpServletRequest request, String strView, String strParameter, int nValue ) {
+        return  super.redirect( request, strView, strParameter, nValue );
     }
 }
