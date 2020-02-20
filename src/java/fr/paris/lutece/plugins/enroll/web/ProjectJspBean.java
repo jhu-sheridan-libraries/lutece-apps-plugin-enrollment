@@ -145,14 +145,16 @@ public class ProjectJspBean extends ManageEnrollJspBean
         int nIdProject = Integer.parseInt( strIdProject );
         Project project = ProjectHome.findByPrimaryKey( nIdProject );
 
-        if (project.getActive() == 0 && !project.hasRoom() ) {
-            addInfo( INFO_INCREASE_SIZE, getLocale(  ) );
-            return redirectView( request, VIEW_MANAGE_PROJECTS );
+        if ( project != null ) {
+
+            if (project.getActive() == 0 && !project.hasRoom()) {
+                addInfo(INFO_INCREASE_SIZE, getLocale());
+                return redirectView(request, VIEW_MANAGE_PROJECTS);
+            }
+
+            project.flipActive();
+            ProjectHome.update(project);
         }
-
-        project.flipActive();
-        ProjectHome.update( project );
-
         return redirectView( request, VIEW_MANAGE_PROJECTS );
     }
 
@@ -178,7 +180,8 @@ public class ProjectJspBean extends ManageEnrollJspBean
     public String copyEmails( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
-        String projectName = ProjectHome.findByPrimaryKey(nId).getName();
+        Project project = ProjectHome.findByPrimaryKey(nId);
+        String projectName = project != null ? project.getName() : "";
         String result = "";
 
         for (Enrollment enrollment : EnrollmentHome.getEnrollmentsForProgram(projectName)) {
