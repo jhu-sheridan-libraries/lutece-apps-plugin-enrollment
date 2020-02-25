@@ -25,10 +25,7 @@ public class EnrollmentXPage extends MVCApplication {
   private static final String TEMPLATE_ENROLLMENT_RESULT="skin/plugins/enroll/enrollment_result.html";
 
   // Parameters
-  private static final String MARK_ENROLLMENT = "enrollment";
   private static final String MARK_LIST_PROJECTS = "refListProjects";
-
-  private static final String VIEW_CREATE_ENROLLMENT = "createEnrollment";
   private static final String ACTION_CREATE_ENROLLMENT = "createEnrollment";
 
 
@@ -36,14 +33,14 @@ public class EnrollmentXPage extends MVCApplication {
   public XPage doCreateEnrollment( HttpServletRequest request )  {
       Enrollment enrollment = new Enrollment(  );
       populate( enrollment, request );
+      Map<String, Object> model = getModel();
 
       // Check constraints
       if ( !validateBean( enrollment, getLocale( request ) ) )
       {
-          return redirectView( request, VIEW_CREATE_ENROLLMENT );
+          model.put( "invalid", true);
+          return getXPage( TEMPLATE_ENROLLMENT_RESULT, request.getLocale(), model );
       }
-
-      Map<String, Object> model = getModel();
 
       Project project = ProjectHome.findByName( enrollment.getProgram() );
 
