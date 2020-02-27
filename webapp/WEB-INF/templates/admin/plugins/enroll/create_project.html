@@ -8,7 +8,7 @@
         </@formGroup>
 
         <@formGroup labelFor="size" labelKey='#i18n{enroll.create_project.labelSize}'  helpKey='#i18n{enroll.create_project.labelSize.help}' mandatory=true>
-            <@input type='number' name='size' maxlength=50 value="${project.size!''}"/>
+            <@input type='number' name='size' min='0' step='1' maxlength=50 value="${project.size!''}"/>
         </@formGroup>
         <input type="hidden" id="currentsize" name="currentsize"/>
         <input type="hidden" id="active" name="active"/>

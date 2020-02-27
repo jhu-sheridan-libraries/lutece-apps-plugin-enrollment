@@ -8,7 +8,7 @@
         <@input  type='text' name='name' maxlength=50 value="${project.name}"/>
     </@formGroup>
     <@formGroup labelFor='size' labelKey='#i18n{enroll.create_project.labelSize}' helpKey='#i18n{enroll.create_project.labelSize.help}' mandatory=true>
-        <@input  type='number' name='size' maxlength=50 value="${project.size}"/>
+        <@input  type='number' min='0' step='1' name='size' maxlength=50 value="${project.size}"/>
     </@formGroup>
     <@formGroup>
         <@submitCancelButtons button1Name="action_modifyProject" button2Name="view_manageProjects"/>
