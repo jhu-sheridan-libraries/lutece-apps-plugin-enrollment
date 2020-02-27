@@ -1,6 +1,7 @@
 <div class="row" >
     <div class="col-sm-12">
         <@tform class="form-horizontal" method="post" name="create_enrollment" action="jsp/site/Portal.jsp?page=enrollment">
+        <input type="hidden" id = "origin" name="origin" value="form"/>
         <@formGroup labelFor="name" labelKey='#i18n{enroll.modify_enrollment.labelName}' helpKey='#i18n{enroll.modify_enrollment.labelName.help}' mandatory=true>
         <@input type='text' name='name' maxlength=50 />
         </@formGroup>

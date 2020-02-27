@@ -35,6 +35,13 @@ public class EnrollmentXPage extends MVCApplication {
       populate( enrollment, request );
       Map<String, Object> model = getModel();
 
+
+      String origin = request.getParameter("origin");
+
+      if( origin != null && !origin.isEmpty()) {
+          model.put("origin", origin);
+      }
+
       // Check constraints
       if ( !validateBean( enrollment, getLocale( request ) ) )
       {

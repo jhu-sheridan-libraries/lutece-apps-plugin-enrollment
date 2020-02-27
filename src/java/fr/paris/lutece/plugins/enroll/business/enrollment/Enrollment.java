@@ -1,15 +1,22 @@
 package fr.paris.lutece.plugins.enroll.business.enrollment;
 
-import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.*;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 public class Enrollment implements Serializable {
   private int _nId;
   private String _strEnrollment;
+
+  @NotEmpty
   private String _strContactName;
+
+  @Email
   private String _strContactEmail;
+
+  @NotEmpty
   private String _strContactNumber;
 
   public int getId() {

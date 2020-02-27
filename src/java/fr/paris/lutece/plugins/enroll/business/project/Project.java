@@ -33,8 +33,9 @@
  */
 package fr.paris.lutece.plugins.enroll.business.project;
 
-import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.*;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Min;;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -48,10 +49,13 @@ public class Project implements Serializable
     // Variables declarations
     private int _nId;
 
+    @NotEmpty
     private String _strName;
 
+    @Min ( 0 )
     private int _size;
 
+    @Min ( 0 )
     private int _currentsize;
 
     private int _active;

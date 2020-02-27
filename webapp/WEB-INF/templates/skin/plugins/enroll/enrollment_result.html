@@ -6,7 +6,9 @@
                 <#if success=true>
                     <p class="lead text-center">#i18n{enroll.create_enrollment.successMessage}</p>
                 <#else>
-                    <p class="lead text-center">#i18n{enroll.create_enrollment.failMessage}</p>
+                    <#if origin?? && origin="form">
+                        <p class="lead text-center">#i18n{enroll.create_enrollment.failMessage}</p>
+                    </#if>
                 </#if>
             </#if>
             <#if inactive?? && inactive=true>

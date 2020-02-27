@@ -11,8 +11,8 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.url.UrlItem;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class provides the user interface to manage Enrollment features ( manage, create, modify, remove )
@@ -22,9 +22,8 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
 {
     // Template
     private static final String TEMPLATE_MANAGE_ENROLLMENTS="/admin/plugins/enroll/manage_enrollments.html";
-    private static final String TEMPLATE_CREATE_ENROLLMENT="/skin/plugins/enroll/create_enrollment.html";
     private static final String TEMPLATE_MODIFY_ENROLLMENT="/admin/plugins/enroll/modify_enrollment.html";
-    private static final String TEMPLATE_ADD_ENROLLMENT_TO_PROJECT="/admin/plugins/enroll/create_enrollment.html";
+    private static final String TEMPLATE_ADD_ENROLLMENT_TO_PROJECT="/admin/plugins/enroll/add_enrollment_to_project.html";
 
     // Parameters
     protected static final String PARAMETER_ID_ENROLLMENT = "id";
@@ -44,7 +43,6 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     private static final String MARK_ENROLLMENT_LIST = "enrollment_list";
     private static final String MARK_ENROLLMENT = "enrollment";
     private static final String MARK_PROJECT = "project";
-    private static final String MARK_LIST_PROJECTS = "refListProjects";
 
     private static final String JSP_MANAGE_ENROLLMENTS = "jsp/admin/plugins/enroll/ManageEnroll.jsp";
 
@@ -74,6 +72,9 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     private static final String INFO_PROJECT_FULL = "enroll.info.project.full";
     private static final String INFO_PROJECT_UPDATED = "enroll.info.project.updated";
     private static final String INFO_INCREASE_SIZE = "enroll.info.project.increase";
+
+    // Session variable to store working values
+    private Enrollment _enrollment = null;
 
     /**
      * Build the Manage View
@@ -156,10 +157,10 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ENROLLMENT ) );
         int projectId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
-        Enrollment enrollment = EnrollmentHome.findByPrimaryKey( nId );
+        _enrollment = EnrollmentHome.findByPrimaryKey( nId );
 
         Map<String, Object> model = getModel(  );
-        model.put( MARK_ENROLLMENT, enrollment );
+        model.put( MARK_ENROLLMENT, _enrollment );
         model.put( PARAMETER_ID_PROJECT, projectId);
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_ENROLLMENT, TEMPLATE_MODIFY_ENROLLMENT, model );
     }
@@ -174,16 +175,16 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     public String doModifyEnrollment( HttpServletRequest request )
     {
         int projectId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
-        Enrollment enrollment = new Enrollment();
-        populate( enrollment, request );
+        _enrollment = new Enrollment();
+        populate( _enrollment, request );
 
         // Check constraints
-        if ( !validateBean( enrollment, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if ( !validateBean( _enrollment, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_ENROLLMENT, PARAMETER_ID_ENROLLMENT, enrollment.getId( ) );
+            return redirect( request, VIEW_MODIFY_ENROLLMENT, PARAMETER_ID_ENROLLMENT, _enrollment.getId( ) );
         }
 
-        EnrollmentHome.update( enrollment );
+        EnrollmentHome.update( _enrollment );
         addInfo( INFO_ENROLLMENT_UPDATED, getLocale(  ) );
         return redirect( request, VIEW_MANAGE_ENROLLMENTS, PARAMETER_ID_PROJECT, projectId);
     }
@@ -226,18 +227,18 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
     {
         int projectId = Integer.parseInt( request.getParameter( PARAMETER_ID_PROJECT ) );
         Project project = ProjectHome.findByPrimaryKey(projectId);
-        Enrollment enrollment = new Enrollment();
-        populate( enrollment, request );
+        _enrollment = new Enrollment();
+        populate( _enrollment, request );
 
         // Check constraints
-        if ( !validateBean( enrollment, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if ( !validateBean( _enrollment, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_ENROLLMENT, PARAMETER_ID_ENROLLMENT, enrollment.getId( ) );
+            return redirect( request, VIEW_MODIFY_ENROLLMENT, PARAMETER_ID_ENROLLMENT, _enrollment.getId( ) );
         }
 
         //add enrollment if the project is active and has room
         if ( project.canAdd()) {
-                EnrollmentHome.create(enrollment);
+                EnrollmentHome.create(_enrollment);
                 project.setCurrentSize(project.getCurrentSize() + 1);
                 ProjectHome.update(project);
                 addInfo(INFO_ENROLLMENT_CREATED, getLocale());
