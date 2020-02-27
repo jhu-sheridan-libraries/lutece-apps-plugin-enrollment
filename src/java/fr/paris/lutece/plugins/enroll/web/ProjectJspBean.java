@@ -146,12 +146,6 @@ public class ProjectJspBean extends ManageEnrollJspBean
         Project project = ProjectHome.findByPrimaryKey( nIdProject );
 
         if ( project != null ) {
-
-            if (project.getActive() == 0 && !project.hasRoom()) {
-                addInfo(INFO_INCREASE_SIZE, getLocale());
-                return redirectView(request, VIEW_MANAGE_PROJECTS);
-            }
-
             project.flipActive();
             ProjectHome.update(project);
         }

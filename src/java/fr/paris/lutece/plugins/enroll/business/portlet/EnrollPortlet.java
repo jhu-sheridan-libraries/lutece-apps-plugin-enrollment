@@ -100,7 +100,7 @@ public class EnrollPortlet extends PortletHtmlContent
     }
 
     /**
-     * Set the id of the appointment form to display
+     * Set the id of the project form to display
      *
      * @param nIdProject
      *            The id of the appointment form to display

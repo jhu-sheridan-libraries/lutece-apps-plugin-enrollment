@@ -1,10 +1,13 @@
 <div class="col-sm-4"></div>
     <div class="col-sm-4">
+        <p/>
         <div class="login-box-body bg-yellow">
             <#if success??>
-                <p class="lead text-center">#i18n{enroll.create_enrollment.successMessage}</p>
-            <#else>
-                <p class="lead text-center">#i18n{enroll.create_enrollment.failMessage}</p>
+                <#if success=true>
+                    <p class="lead text-center">#i18n{enroll.create_enrollment.successMessage}</p>
+                <#else>
+                    <p class="lead text-center">#i18n{enroll.create_enrollment.failMessage}</p>
+                </#if>
             </#if>
             <#if inactive?? && inactive=true>
                 <p class="lead text-center">#i18n{enroll.info.project.inactive}</p>
@@ -17,5 +20,4 @@
             </#if>
             <p class="lead text-center">#i18n{enroll.create_enrollment.pageClose}</p>
         </div>
-    </div>
 <div class="col-sm-4"></div>

@@ -1,55 +1,33 @@
 <div class="row" >
     <div class="col-sm-12">
+        <@tform class="form-horizontal" method="post" name="create_enrollment" action="jsp/site/Portal.jsp?page=enrollment">
+        <@formGroup labelFor="name" labelKey='#i18n{enroll.modify_enrollment.labelName}' helpKey='#i18n{enroll.modify_enrollment.labelName.help}' mandatory=true>
+        <@input type='text' name='name' maxlength=50 />
+        </@formGroup>
+        <@formGroup labelKey='#i18n{enroll.modify_enrollment.labelProgram}'>
+        <#if program??>
+            <@staticText> ${program} </@staticText>
+            <input type="hidden" id="program" name="program" value="${program}"/>
+        <#else>
+            <select class="form-control" id="program" name="program">
+                <#list refListProjects as item>
+                <option value="${item.name}" >${item.name}</option>
+                </#list>
+            </select>
+            <span class="help-block">#i18n{enroll.create_enrollment.labelProgram.help}</span>
 
-    <form class="form-horizontal" role="form" method="post" action="jsp/site/Portal.jsp?page=enrollment">
-        <fieldset>
-            <p>&nbsp;<p>
-            <legend>#i18n{enroll.create_enrollment.title}</legend>
-            <p>#i18n{enroll.create_enrollment.note}</p>
-            <p>&nbsp;<p>
+        </#if>
 
-            <@messages errors=errors />
-            <input type="hidden" id="id" name="id"/>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="name" >#i18n{enroll.create_enrollment.labelProgram} :</label>
-                <div class="col-sm-6">
-                    <select class="form-control" id="program" name="program">
-                      <#list refListProjects as item>
-                        <option value="${item.name}" >${item.name}</option>
-                      </#list>
-                    </select>
-                    <span class="help-block">#i18n{enroll.create_enrollment.labelProgram.help}</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="name" >#i18n{enroll.create_enrollment.labelName} :</label>
-                <div class="col-sm-6">
-                    <input class="form-control" type="text" id="name" name="name" value="${(enrollment.name)!''}"  maxlength="50" tabindex="1" />
-                    <span class="help-block">#i18n{enroll.create_enrollment.labelName.help}</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="email" >#i18n{enroll.create_enrollment.labelEmail} :</label>
-                <div class="col-sm-6">
-                    <input class="form-control" type="text" id="email" name="email" value="${(enrollment.email)!''}"  maxlength="50" tabindex="2" />
-                    <span class="help-block">#i18n{enroll.create_enrollment.labelEmail.help}</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="phone" >#i18n{enroll.create_enrollment.labelPhone} :</label>
-                <div class="col-sm-6">
-                    <input class="form-control" type="text" id="phone" name="phone" value="${(enrollment.phone)!''}"  maxlength="50" tabindex="3" />
-                    <span class="help-block">#i18n{enroll.create_enrollment.labelPhone.help}</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-6">
-                    <button name="action_createEnrollment" class="btn btn-primary" type="submit" tabindex="4">
-                        #i18n{portal.util.labelCreate}
-                    </button>
-                </div>
-            </div>
-        </fieldset>
-    </form>
+        </@formGroup>
+        <@formGroup labelFor="email" labelKey='#i18n{enroll.modify_enrollment.labelEmail}' helpKey='#i18n{enroll.modify_enrollment.labelEmail.help}' mandatory=true>
+        <@input type='email' name='email' maxlength=50 />
+        </@formGroup>
+        <@formGroup labelFor="phone" labelKey='#i18n{enroll.modify_enrollment.labelPhone}' helpKey='#i18n{enroll.modify_enrollment.labelPhone.help}' mandatory=true>
+        <@input type='text' name='phone' maxlength=50 />
+        </@formGroup>
+        <@formGroup>
+        <@submitCancelButtons button1Name="action_createEnrollment" />
+        </@formGroup>
+        </@tform>
     </div>
 </div>
