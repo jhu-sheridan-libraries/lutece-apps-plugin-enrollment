@@ -1,0 +1,14 @@
+<div class="col-sm-4">
+    <div class="login-box-body bg-yellow">
+            <p><h3>Project Status</h3></p>
+        <#if inactive?? && inactive=true>
+            <p class="lead text-center">#i18n{enroll.info.project.inactive}</p>
+        </#if>
+        <#if full?? && full=true>
+            <p class="lead text-center">#i18n{enroll.info.project.full}</p>
+        </#if>
+        <#if invalid?? && invalid=true>
+            <p class="lead text-center">#i18n{enroll.info.project.invalid}</p>
+        </#if>
+    </div>
+</div>

@@ -23,6 +23,7 @@ public class EnrollmentXPage extends MVCApplication {
 
   private static final String TEMPLATE_CREATE_ENROLLMENT="/skin/plugins/enroll/create_enrollment.html";
   private static final String TEMPLATE_ENROLLMENT_RESULT="/skin/plugins/enroll/enrollment_result.html";
+  private static final String TEMPLATE_PROJECT_STATUS="/skin/plugins/enroll/project_status.html";
 
   // Parameters
   private static final String MARK_LIST_PROJECTS = "refListProjects";
@@ -34,13 +35,6 @@ public class EnrollmentXPage extends MVCApplication {
       Enrollment enrollment = new Enrollment(  );
       populate( enrollment, request );
       Map<String, Object> model = getModel();
-
-
-      String origin = request.getParameter("origin");
-
-      if( origin != null && !origin.isEmpty()) {
-          model.put("origin", origin);
-      }
 
       // Check constraints
       if ( !validateBean( enrollment, getLocale( request ) ) )
@@ -96,24 +90,23 @@ public class EnrollmentXPage extends MVCApplication {
           model.put(MARK_LIST_PROJECTS, refListProjects);
           HtmlTemplate template = AppTemplateService.getTemplate(TEMPLATE_CREATE_ENROLLMENT, locale, model);
           return template.getHtml();
-      }else {//
+      }else {//program specified; return form if it can add, else return information about project
           Project project = ProjectHome.findByName(program);
-          if (project == null) {
-              model.put("success", false);
-              model.put("invalid", true);
-          } else if (!project.canAdd()) {
-              model.put("success", false);
-              model.put("inactive", project.getActive() == 0);
-              model.put("full", project.atCapacity());
-          } else {
+          if (project != null && project.canAdd()) {
               model.put("program", program);
               HtmlTemplate template = AppTemplateService.getTemplate(TEMPLATE_CREATE_ENROLLMENT, locale, model);
               return template.getHtml();
+          } else {
+              if (project == null ) {
+                  model.put("invalid", true);
+              } else {
+                  model.put("inactive", project.getActive() == 0);
+                  model.put("full", project.atCapacity());
+              }
+              HtmlTemplate template = AppTemplateService.getTemplate(TEMPLATE_PROJECT_STATUS, locale, model);
+              return template.getHtml();
           }
+
       }
-
-      HtmlTemplate template = AppTemplateService.getTemplate(TEMPLATE_ENROLLMENT_RESULT, locale, model);
-      return template.getHtml();
-
   }
 }
