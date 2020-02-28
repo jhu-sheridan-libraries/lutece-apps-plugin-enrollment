@@ -47,15 +47,15 @@ public class EnrollmentXPage extends MVCApplication {
 
       if ( project != null ) {
           if ( project.canAdd() ) {
-                EnrollmentHome.create( enrollment );
-                project.setCurrentSize( project.getCurrentSize() + 1 );
-                ProjectHome.update(project);
-                model.put("success", true);
-                } else {
-                    model.put("success", false);
-                    model.put("inactive", project.getActive()==0);
-                    model.put( "full", project.atCapacity());
-                }
+              project.setCurrentSize( project.getCurrentSize() + 1 );
+              ProjectHome.update(project);
+              EnrollmentHome.create( enrollment );
+              model.put("success", true);
+          } else {
+              model.put("success", false);
+              model.put("inactive", project.getActive()==0);
+              model.put( "full", project.atCapacity());
+          }
       } else {//could not find a project by this name - supplied project is not valid
           model.put("success", false);
           model.put("invalid", true);

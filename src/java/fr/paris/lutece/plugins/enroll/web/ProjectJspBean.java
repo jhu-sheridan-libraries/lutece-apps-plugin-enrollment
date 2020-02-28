@@ -72,7 +72,6 @@ public class ProjectJspBean extends ManageEnrollJspBean
     private static final String INFO_PROJECT_CREATED = "enroll.info.project.created";
     private static final String INFO_PROJECT_UPDATED = "enroll.info.project.updated";
     private static final String INFO_PROJECT_REMOVED = "enroll.info.project.removed";
-    private static final String INFO_INCREASE_SIZE = "enroll.info.project.increase";
     private static final String INFO_SIZE_IS_SMALL = "enroll.info.project.sizesmall";
     private static final String INFO_PROJECT_SAME_NAME = "enroll.info.project.samename";
     private static final String INFO_EMAILS_COPIED = "enroll.info.project.emailscopied";
