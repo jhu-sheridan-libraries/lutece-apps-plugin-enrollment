@@ -44,14 +44,6 @@
         <freemarker-macro-file>*/enroll_macros.html</freemarker-macro-file>
     </freemarker-macro-files>
 
-    <!-- Admin Dashboard  components -->
-    <admindashboard-components>
-        <admindashboard-component>
-            <dashboard-component-name>enrollmentAdminDashboardComponent</dashboard-component-name>
-            <dashboard-component-class>fr.paris.lutece.plugins.enroll.web.EnrollmentAdminDashboardComponent</dashboard-component-class>
-        </admindashboard-component>
-    </admindashboard-components>
-
     <!-- Dashboard  components -->
     <dashboard-components>
         <dashboard-component>
@@ -73,9 +65,9 @@
 	   <portlet-create-action-url>plugins/enroll/DoCreatePortletEnroll.jsp</portlet-create-action-url>
        <portlet-modify-action-url>plugins/enroll/DoModifyPortletEnroll.jsp</portlet-modify-action-url>
 	    <!-- optional entries -->
-        <portlet-create-script-template>/admin/portlet/script_create_portlet.html</portlet-create-script-template>
-        <portlet-modify-script-template>/admin/portlet/script_modify_portlet.html</portlet-modify-script-template>
-        <portlet-create-specific-template>/admin/plugins/enroll/portlet/create_portletenroll.html</portlet-create-specific-template>
+       <portlet-create-script-template>/admin/portlet/script_create_portlet.html</portlet-create-script-template>
+         <portlet-modify-script-template>/admin/portlet/script_modify_portlet.html</portlet-modify-script-template>
+         <portlet-create-specific-template>/admin/plugins/enroll/portlet/create_portletenroll.html</portlet-create-specific-template>
         <portlet-modify-specific-template>/admin/plugins/enroll/portlet/modify_portletenroll.html</portlet-modify-specific-template>
      </portlet>
    </portlets>
