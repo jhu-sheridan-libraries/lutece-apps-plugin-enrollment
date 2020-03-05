@@ -17,7 +17,6 @@ import java.util.List;
 
 import static fr.paris.lutece.plugins.enroll.web.EnrollmentsJspBean.PARAMETER_ID_PROJECT;
 import static fr.paris.lutece.plugins.enroll.web.EnrollmentsJspBean.*;
-import static fr.paris.lutece.plugins.enroll.web.ProjectJspBean.*;
 import static org.mockito.ArgumentMatchers.*;
 
 
@@ -30,51 +29,37 @@ public class EnrollmentsJspBeanTest extends LuteceTestCase {
     EnrollmentsJspBean instance = SpringContextService.getBean( "enroll.EnrollmentsJspBean" );
     EnrollmentsJspBean underTest = Mockito.spy( instance );
 
-    //this function creates a project that enrollments can be added to, modified, or deleted
-    public void testCreateProject() {
-        String name = "Test Project";
-        String size = "30";
+    public void testCreateEnrollment() {
+        Project project = reset();
 
-        request = new MockHttpServletRequest( );
+        Mockito.doReturn("Return value not needed - ignored").when(underTest).redirect( any(), anyString(), anyString(), anyInt() );
+        Mockito.doReturn("Return value not needed - ignored").when(underTest).getPage( anyString(), anyString(), any() );
 
-        //create project
-        request.addParameter( PARAMETER_NAME_PROJECT, name );
-        request.addParameter( PARAMETER_SIZE_PROJECT, size );
-        request.addParameter( PARAMETER_CURRENTSIZE_PROJECT, "" );
-        request.addParameter( PARAMETER_STATUS_PROJECT, "" );
-        request.addParameter(PARAMETER_ID_PROJECT, "" );
+        //test addition of an enrollment
+        Enrollment newEnrollment = new Enrollment();
+        newEnrollment.setProgram( "Create Enrollment" );
+        newEnrollment.setEmail("user@place.com");
+        newEnrollment.setName("Albert Batross");
+        newEnrollment.setPhone("867-5309");
+        newEnrollment.setId(1); // reset means enrollment list was empty, this is the first row in the table
 
-        List<Project> projectList = ProjectHome.getProjectsList();
-        //project id is the database row number
-        int newProjectId = projectList.size() + 1; //one more than the last existing project id
-
+        request = new MockHttpServletRequest();
+        request.addParameter(PARAMETER_PROGRAM_ENROLLMENT, String.valueOf(newEnrollment.getProgram()));
+        request.addParameter(PARAMETER_NAME_ENROLLMENT, newEnrollment.getName());
+        request.addParameter(PARAMETER_EMAIL_ENROLLMENT, String.valueOf(newEnrollment.getEmail()));
+        request.addParameter(PARAMETER_PHONE_ENROLLMENT, newEnrollment.getPhone());
+        request.addParameter(PARAMETER_ID_PROJECT, String.valueOf( project.getId() ));
         listener.requestInitialized( new ServletRequestEvent( context, request ) );
-        ProjectJspBean projectBeanInstance = SpringContextService.getBean( "enroll.ProjectJspBean" );
 
-        //mock this method called in the return - we don't need it, and it gives NPE if invoked here
-        ProjectJspBean instance1 = Mockito.spy( projectBeanInstance );
-        Mockito.doReturn("Return value not needed - ignored").when(instance1).redirectView( any(), anyString() );
+        underTest.doAddEnrollmentToProject(request);
 
-        instance1.doCreateProject(request);
-
-        //at this point this project should be in the database
-        projectList = ProjectHome.getProjectsList();
-
-        // this should be the project we just added
-        Project latestProject = projectList.get(newProjectId-1);
-
-        //make sure the last project is the one we are looking at
-        assertEquals( name, latestProject.getName() );
-        assertEquals( size, Integer.toString(latestProject.getSize()) );
-        assertEquals( 1, latestProject.getActive() );
-        assertEquals( 0, latestProject.getCurrentSize() );
-        assertEquals( newProjectId,  latestProject.getId() );
-        listener.requestDestroyed( new ServletRequestEvent( context, request ) );
+        List<Enrollment> enrollmentList = EnrollmentHome.getEnrollmentsList();
+        assertEquals ( 1, enrollmentList.size());
+        assertEquals ( newEnrollment, enrollmentList.get(0) );
     }
 
-
-    public void testCreateEnrollment() {
-        int initialProjectId = ProjectHome.update(reset()).getId();
+    public void testAddProjectToEnrollmentEnrollment() {
+        int initialProjectId = reset().getId();
 
         Mockito.doReturn("Return value not needed - ignored").when(underTest).redirect( any(), anyString(), anyString(), anyInt() );
         Mockito.doReturn("Return value not needed - ignored").when(underTest).getPage( anyString(), anyString(), any() );
@@ -110,9 +95,8 @@ public class EnrollmentsJspBeanTest extends LuteceTestCase {
     }
 
     public void testModifyEnrollment() {
-        Project project = ProjectHome.update(reset());
-        int projectId = project.getId();
-        Enrollment enrollment = EnrollmentHome.update(makeEnroll(project));
+        Project project = reset();
+        Enrollment enrollment = EnrollmentHome.create(makeEnroll( project ));
         Mockito.doReturn("Return value not needed - ignored").when(underTest).redirect( any(), anyString(), anyString(), anyInt() );
         Mockito.doReturn("Return value not needed - ignored").when(underTest).getPage( anyString(), anyString(), any() );
 
@@ -120,7 +104,7 @@ public class EnrollmentsJspBeanTest extends LuteceTestCase {
         modifiedEnrollment.setName("Jane Smith");
         modifiedEnrollment.setPhone("098-7654");
         modifiedEnrollment.setEmail("new@email.com");
-        modifiedEnrollment.setPhone(enrollment.getProgram());
+        modifiedEnrollment.setProgram(enrollment.getProgram());
         modifiedEnrollment.setId(enrollment.getId());
 
         request = new MockHttpServletRequest();
@@ -137,15 +121,11 @@ public class EnrollmentsJspBeanTest extends LuteceTestCase {
         Enrollment  processedEnrollment = EnrollmentHome.findByPrimaryKey(modifiedEnrollment.getId());
         assertEquals(modifiedEnrollment, processedEnrollment);
 
-        project = ProjectHome.findByPrimaryKey(projectId);
-        assertEquals(1, project.getCurrentSize());
-
         listener.requestDestroyed( new ServletRequestEvent( context, request ) );
     }
 
     public void testRemoveEnrollment() {
-        Project project = ProjectHome.update(reset());
-        int projectId = project.getId();
+        Project project = reset();
         Enrollment enrollment = EnrollmentHome.update(makeEnroll(project));
         Mockito.doReturn("Return value not needed - ignored").when(underTest).redirect( any(), anyString(), anyString(), anyInt() );
         Mockito.doReturn("Return value not needed - ignored").when(underTest).getPage( anyString(), anyString(), any() );
@@ -157,9 +137,7 @@ public class EnrollmentsJspBeanTest extends LuteceTestCase {
         listener.requestInitialized( new ServletRequestEvent( context, request ) );
         underTest.doRemoveEnrollment(request);
 
-        assertNull(EnrollmentHome.findByPrimaryKey(enrollment.getId()));
-        project = ProjectHome.findByPrimaryKey(projectId);
-        assertEquals(0, project.getCurrentSize());
+        assertNull(EnrollmentHome.findByPrimaryKey(enrollment.getId()));;
 
         listener.requestDestroyed( new ServletRequestEvent( context, request ) );
 

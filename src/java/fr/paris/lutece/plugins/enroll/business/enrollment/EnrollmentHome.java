@@ -22,7 +22,7 @@ public final class EnrollmentHome {
   }
 
   /**
-   * Create an instance of the project class
+   * Create an instance of the Enrollment class
    * @param enrollment The instance of the Enrollment which contains the information to store
    * @return The  instance of project which has been created with its primary key.
    */
@@ -32,9 +32,9 @@ public final class EnrollmentHome {
   }
 
   /**
-   * Update of the project which is specified in parameter
+   * Update of the Enrollment which is specified in parameter
    * @param enrollment The instance of the Enrollment which contains the data to store
-   * @return The instance of the  project which has been updated
+   * @return The instance of the Enrollment which has been updated
    */
   public static Enrollment update(Enrollment enrollment) {
     _dao.store(enrollment, _plugin);
