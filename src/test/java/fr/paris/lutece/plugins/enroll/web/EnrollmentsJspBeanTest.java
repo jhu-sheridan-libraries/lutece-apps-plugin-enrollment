@@ -188,7 +188,7 @@ public class EnrollmentsJspBeanTest extends LuteceTestCase {
         listener.requestInitialized( new ServletRequestEvent( context, request ) );
         underTest.doRemoveEnrollment(request);
 
-        assertNull(EnrollmentHome.findByPrimaryKey(enrollment.getId()));;
+        assertNull(EnrollmentHome.findByPrimaryKey(enrollment.getId()));
 
         assertEquals(0, ProjectHome.findByName(project.getName()).getCurrentSize());
 
