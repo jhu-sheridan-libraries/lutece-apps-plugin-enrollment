@@ -107,8 +107,7 @@ public class EnrollmentsJspBeanTest extends LuteceTestCase {
         int initialProjectId = project.getId();
 
         project.setCurrentSize(project.getSize());
-
-        assertTrue(project.getSize() > 0);
+        assertTrue(project.atCapacity());
 
         ProjectHome.update(project);
 
