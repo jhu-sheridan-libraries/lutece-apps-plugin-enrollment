@@ -65,7 +65,7 @@ public class EnrollPortlet extends PortletHtmlContent
     {
       if ( request != null )
       {
-          return EnrollmentXPage.getEnrollmentHtml( request, request.getLocale( ) );
+          // return EnrollmentXPage.getEnrollmentHtml( request, request.getLocale( ) );
       }
 
       return StringUtils.EMPTY;

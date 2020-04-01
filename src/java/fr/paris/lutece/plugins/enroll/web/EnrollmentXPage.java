@@ -13,10 +13,8 @@ import java.util.Map;
 import java.util.Collection;
 import fr.paris.lutece.util.ReferenceList;
 import java.util.HashMap;
-import java.util.Locale;
-import fr.paris.lutece.util.html.HtmlTemplate;
 import javax.servlet.http.HttpServletRequest;
-import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 
 @Controller( xpageName = "enrollment" , pageTitleI18nKey = "enroll.xpage.enrollment.pageTitle" , pagePathI18nKey = "enroll.xpage.enrollment.pagePathLabel" )
 public class EnrollmentXPage extends MVCApplication {
@@ -27,7 +25,9 @@ public class EnrollmentXPage extends MVCApplication {
 
   // Parameters
   private static final String MARK_LIST_PROJECTS = "refListProjects";
+  private static final String VIEW_ENROLLMENT = "enrollment";
   private static final String ACTION_CREATE_ENROLLMENT = "createEnrollment";
+  private static final long serialVersionUID = 1L;
 
 
   @Action( ACTION_CREATE_ENROLLMENT )
@@ -73,7 +73,8 @@ public class EnrollmentXPage extends MVCApplication {
    *            The locale
    * @return The HTML content
    */
-  public static String getEnrollmentHtml(HttpServletRequest request, Locale locale)
+  @View( value = VIEW_ENROLLMENT , defaultView = true )
+  public XPage getEnrollmentHtml(HttpServletRequest request)
   {
 
       Map<String, Object> model = new HashMap<>( );
@@ -88,14 +89,12 @@ public class EnrollmentXPage extends MVCApplication {
               }
           }
           model.put(MARK_LIST_PROJECTS, refListProjects);
-          HtmlTemplate template = AppTemplateService.getTemplate(TEMPLATE_CREATE_ENROLLMENT, locale, model);
-          return template.getHtml();
+          return getXPage(TEMPLATE_CREATE_ENROLLMENT, request.getLocale(  ), model);
       }else {//program specified; return form if it can add, else return information about project
           Project project = ProjectHome.findByName(program);
           if (project != null && project.canAdd()) {
               model.put("program", program);
-              HtmlTemplate template = AppTemplateService.getTemplate(TEMPLATE_CREATE_ENROLLMENT, locale, model);
-              return template.getHtml();
+              return getXPage(TEMPLATE_CREATE_ENROLLMENT, request.getLocale(  ), model);
           } else {
               if (project == null ) {
                   model.put("invalid", true);
@@ -103,8 +102,7 @@ public class EnrollmentXPage extends MVCApplication {
                   model.put("inactive", project.getActive() == 0);
                   model.put("full", project.atCapacity());
               }
-              HtmlTemplate template = AppTemplateService.getTemplate(TEMPLATE_PROJECT_STATUS, locale, model);
-              return template.getHtml();
+              return getXPage(TEMPLATE_PROJECT_STATUS, request.getLocale(  ), model);
           }
 
       }
