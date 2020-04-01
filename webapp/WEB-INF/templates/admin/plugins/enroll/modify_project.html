@@ -1,18 +1,24 @@
 <#include "manageenroll_tabs.html" />
+<@row>
+    <@columns>
+        <@box>
+            <@boxHeader i18nTitleKey="enroll.modify_project.pageTitle" />
+            <@messages infos=infos warnings=warnings errors=errors/>
+            <@tform name="modify_project" action="jsp/admin/plugins/enroll/ManageProjects.jsp">
+                <input type="hidden" id="id" name="id" value="${project.id}"/>
+                <@formGroup labelFor='name' labelKey='#i18n{enroll.modify_project.labelName}' helpKey='#i18n{enroll.modify_project.labelName.help}' mandatory=true>
+                    <@input  type='text' name='name' maxlength=50 value="${project.name}"/>
+                </@formGroup>
+                <@formGroup labelFor='size' labelKey='#i18n{enroll.create_project.labelSize}' helpKey='#i18n{enroll.create_project.labelSize.help}' mandatory=true>
+                    <@input  type='number' name='size' maxlength=50 value="${project.size}"/>
+                </@formGroup>
+                <@formGroup>
+                    <@submitCancelButtons button1Name="action_modifyProject" button2Name="view_manageProjects"/>
+                </@formGroup>
+            </@tform>
+       </@box>
+    </@columns>
+</@row>
 
-<@boxHeader i18nTitleKey="enroll.modify_project.pageTitle" />
-<@messages infos=infos warnings=warnings errors=errors/>
-<@tform name="modify_project" action="jsp/admin/plugins/enroll/ManageProjects.jsp">
-    <input type="hidden" id="id" name="id" value="${project.id}"/>
-    <@formGroup labelFor='name' labelKey='#i18n{enroll.modify_project.labelName}' helpKey='#i18n{enroll.modify_project.labelName.help}' mandatory=true>
-        <@input  type='text' name='name' maxlength=50 value="${project.name}"/>
-    </@formGroup>
-    <@formGroup labelFor='size' labelKey='#i18n{enroll.create_project.labelSize}' helpKey='#i18n{enroll.create_project.labelSize.help}' mandatory=true>
-        <@input  type='number' name='size' maxlength=50 value="${project.size}"/>
-    </@formGroup>
-    <@formGroup>
-        <@submitCancelButtons button1Name="action_modifyProject" button2Name="view_manageProjects"/>
-    </@formGroup>
-</@tform>
 
 

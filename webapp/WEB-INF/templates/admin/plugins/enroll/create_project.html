@@ -1,19 +1,25 @@
-<@boxHeader i18nTitleKey="enroll.create_project.title"/>
-    <@messages infos=infos warnings=warnings errors=errors />
-    <@tform class="form-horizontal" method="post" name="create_project" action="jsp/admin/plugins/enroll/ManageProjects.jsp">
+<@row>
+    <@columns>
+        <@box>
+            <@boxHeader i18nTitleKey="enroll.create_project.title"/>
+            <@messages infos=infos warnings=warnings errors=errors />
+            <@tform class="form-horizontal" method="post" name="create_project" action="jsp/admin/plugins/enroll/ManageProjects.jsp">
 
-        <input type="hidden" id="id" name="id"/>
-        <@formGroup labelFor="name" labelKey='#i18n{enroll.create_project.labelName}'  helpKey='#i18n{enroll.create_project.labelName.help}' mandatory=true>
-            <@input type='text' name='name' value="${project.name!''}" maxlength=50/>
-        </@formGroup>
+                <input type="hidden" id="id" name="id"/>
+                <@formGroup labelFor="name" labelKey='#i18n{enroll.create_project.labelName}'  helpKey='#i18n{enroll.create_project.labelName.help}' mandatory=true>
+                    <@input type='text' name='name' value="${project.name!''}" maxlength=50/>
+                </@formGroup>
 
-        <@formGroup labelFor="size" labelKey='#i18n{enroll.create_project.labelSize}'  helpKey='#i18n{enroll.create_project.labelSize.help}' mandatory=true>
-            <@input type='number' name='size' maxlength=50 value="${project.size!''}"/>
-        </@formGroup>
-        <input type="hidden" id="currentsize" name="currentsize"/>
-        <input type="hidden" id="active" name="active"/>
+                <@formGroup labelFor="size" labelKey='#i18n{enroll.create_project.labelSize}'  helpKey='#i18n{enroll.create_project.labelSize.help}' mandatory=true>
+                    <@input type='number' name='size' maxlength=50 value="${project.size!''}"/>
+                </@formGroup>
+                <input type="hidden" id="currentsize" name="currentsize"/>
+                <input type="hidden" id="active" name="active"/>
 
-        <@formGroup>
-            <@submitCancelButtons button1Name="action_createProject" button2Name="view_manageProject"/>
-        </@formGroup>
-    </@tform>
+                <@formGroup>
+                    <@submitCancelButtons button1Name="action_createProject" button2Name="view_manageProject"/>
+                </@formGroup>
+            </@tform>
+       </@box>
+    </@columns>
+</@row>
