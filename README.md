@@ -23,3 +23,15 @@ mvn clean lutece:exploded antrun:run test \
 
 Installation can be accomplished by appending the `install` goal after the `test` goal in the above `mvn` command. 
 To install without testing, a simple `mvn clean install -Dmaven.test.skip` should suffice.
+
+```
+
+# Student Contributors
+**@author** ehsia1 (github)
+
+**@author** Sofya Freyman    
+  
+**@author** Danielle Currey
+
+**@author** kcaruso4 (github)
+
