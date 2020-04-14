@@ -58,17 +58,19 @@
     <portlets>
      <portlet>
        <portlet-class>fr.paris.lutece.plugins.enroll.business.portlet.EnrollPortletHome</portlet-class>
-	   <portlet-type-id>ENROLL_PORTLET</portlet-type-id>
-	   <portlet-type-name>enroll.portlet.enrollEnrollPortlet.name</portlet-type-name>
-	   <portlet-creation-url>plugins/enroll/CreatePortletEnroll.jsp</portlet-creation-url>
-	   <portlet-update-url>plugins/enroll/ModifyPortletEnroll.jsp</portlet-update-url>
-	   <portlet-create-action-url>plugins/enroll/DoCreatePortletEnroll.jsp</portlet-create-action-url>
+       <portlet-type-id>ENROLL_PORTLET</portlet-type-id>
+       <portlet-type-name>enroll.portlet.enrollEnrollPortlet.name</portlet-type-name>
+       <portlet-creation-url>plugins/enroll/CreatePortletEnroll.jsp</portlet-creation-url>
+       <portlet-update-url>plugins/enroll/ModifyPortletEnroll.jsp</portlet-update-url>
+       <portlet-create-action-url>plugins/enroll/DoCreatePortletEnroll.jsp</portlet-create-action-url>
        <portlet-modify-action-url>plugins/enroll/DoModifyPortletEnroll.jsp</portlet-modify-action-url>
-	    <!-- optional entries -->
-       <portlet-create-script-template>/admin/portlet/script_create_portlet.html</portlet-create-script-template>
+        <!-- optional entries -->
+         <portlet-create-script-template>/admin/portlet/script_create_portlet.html</portlet-create-script-template>
          <portlet-modify-script-template>/admin/portlet/script_modify_portlet.html</portlet-modify-script-template>
          <portlet-create-specific-template>/admin/plugins/enroll/portlet/create_portletenroll.html</portlet-create-specific-template>
-        <portlet-modify-specific-template>/admin/plugins/enroll/portlet/modify_portletenroll.html</portlet-modify-specific-template>
+         <portlet-modify-specific-template>/admin/plugins/enroll/portlet/modify_portletenroll.html</portlet-modify-specific-template>
+         <portlet-create-specific-form-template/>
+         <portlet-modify-specific-form-template/>
      </portlet>
    </portlets>
 </plug-in>
