@@ -103,8 +103,6 @@ public class EnrollmentXPage extends MVCApplication {
    *
    * @param request
    *            The request
-   * @param locale
-   *            The locale
    * @return The HTML content
    */
   @View( value = VIEW_ENROLLMENT , defaultView = true )
