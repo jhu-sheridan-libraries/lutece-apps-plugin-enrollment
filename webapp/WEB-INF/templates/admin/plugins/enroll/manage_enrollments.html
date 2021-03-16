@@ -35,14 +35,10 @@
                 ${enrollment.phone}
             </td>
             <td>
-            <a href="jsp/admin/plugins/enroll/ManageEnrollments.jsp?view=modifyEnrollment&id=${enrollment.id}&projectId=${project}"
-               class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
-                <span class="fa fa-pencil"></span>
-            </a>
-            <a href="jsp/admin/plugins/enroll//ManageEnrollments.jsp?action=confirmRemoveEnrollment&id=${enrollment.id}&projectId=${project}"
-               class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
-                <span class="fa fa-trash-o"></span>
-            </a>
+            <@aButton href="jsp/admin/plugins/enroll/ManageEnrollments.jsp?view=modifyEnrollment&id=${enrollment.id}&projectId=${project}"
+                title="#i18n{portal.util.labelModify}" buttonIcon='edit' size='sm'/>
+            <@aButton  href="jsp/admin/plugins/enroll//ManageEnrollments.jsp?action=confirmRemoveEnrollment&id=${enrollment.id}&projectId=${project}"
+                title="#i18n{portal.util.labelDelete}" buttonIcon='trash' size='sm'/>
         </td>
         </tr>
         </#list>

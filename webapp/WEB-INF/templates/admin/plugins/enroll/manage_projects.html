@@ -23,7 +23,21 @@
                 <tr>
                     <input type="hidden" id="id" name="id"/>
                     <td>
-                ${project.name}
+                        <#if project.active = 1>
+                            <@tag color='success'>
+                                <@icon style='check' />
+                            </@tag>
+                        <#else>
+                            <@tag color='danger'>
+                                <@icon style='times' />
+                             </@tag>
+                        </#if>
+                        ${project.name}
+                        <#if project.active = 1>
+                            <a target="_blank" href="jsp/site/Portal.jsp?page=enrollment&program=${project.name}">
+                            <@icon style='globe' />
+                            </a>
+                    </#if>
                     </td>
                     <td>
                         ${project.size}
@@ -33,32 +47,21 @@
                     </td>
                 <td>
                     <#if project.active = 0>
-                    <a class="btn btn-primary btn-sm btn-success" href="jsp/admin/plugins/enroll/ManageProjects.jsp?action=doChangeProjectStatus&id=${project.id}" title="#i18n{enroll.manage_projects.labelActivateProject}">
-                        <i class="glyphicon glyphicon-ok"></i>
-                    </a>
-                    </#if>
+                        <@aButton href="jsp/admin/plugins/enroll/ManageProjects.jsp?action=doChangeProjectStatus&id=${project.id}"
+                            title="#i18n{enroll.manage_projects.labelActivateProject}" buttonIcon='stop' color='btn-danger' size='sm' />
+                     </#if>
                     <#if project.active = 1>
-                    <a class="btn btn-primary btn-sm btn-danger" href="jsp/admin/plugins/enroll/ManageProjects.jsp?action=doChangeProjectStatus&id=${project.id}" title="#i18n{enroll.manage_projects.labelDeactivateProject}">
-                        <i class="glyphicon glyphicon-remove"></i>
-                    </a>
+                        <@aButton href="jsp/admin/plugins/enroll/ManageProjects.jsp?action=doChangeProjectStatus&id=${project.id}"
+                            title="#i18n{enroll.manage_projects.labelDeactivateProject}" buttonIcon='check' color='btn-success' size='sm' />
                     </#if>
-                    <a href="jsp/admin/plugins/enroll/ManageProjects.jsp?action=copyEmails&id=${project.id}"
-                       class="btn btn-primary btn-sm" title="#i18n{enroll.messages.copyEmails}">
-                    <span class="fa fa-clipboard"></span>
-                    </a>
-                    <a href="jsp/admin/plugins/enroll/ManageEnrollments.jsp?view=manageEnrollments&projectId=${project.id}"
-                       class="btn btn-primary btn-sm" title="#i18n{enroll.messages.viewEnrollments}">
-                    <span class="fa fa-users"></span>
-                    </a>
-                    <a href="jsp/admin/plugins/enroll/ManageProjects.jsp?view=modifyProject&id=${project.id}"
-                       class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
-                        <i class="fa fa-pencil"></i>
-                    </a>
-
-                    <a href="jsp/admin/plugins/enroll/ManageProjects.jsp?action=confirmRemoveProject&id=${project.id}"
-                       class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
-                        <i class="fa fa-trash"></i>
-                    </a>
+                    <@aButton href="jsp/admin/plugins/enroll/ManageProjects.jsp?action=copyEmails&id=${project.id}"
+                        title="#i18n{enroll.messages.copyEmails}" buttonIcon='clipboard' size='sm' />
+                    <@aButton href="jsp/admin/plugins/enroll/ManageEnrollments.jsp?view=manageEnrollments&projectId=${project.id}"
+                        title="#i18n{enroll.messages.viewEnrollments}" buttonIcon='users' size='sm' />
+                    <@aButton href="jsp/admin/plugins/enroll/ManageProjects.jsp?view=modifyProject&id=${project.id}"
+                        title="#i18n{portal.util.labelModify}" buttonIcon="edit" size='sm' />
+                    <@aButton href="jsp/admin/plugins/enroll/ManageProjects.jsp?action=confirmRemoveProject&id=${project.id}"
+                        title="#i18n{portal.util.labelDelete}" buttonIcon='trash' color='btn-danger' size='sm' />
                 </td>
                 </tr>
                 </#list>
