@@ -110,33 +110,49 @@ public class EnrollmentXPage extends MVCApplication {
   {
 
       Map<String, Object> model = new HashMap<>( );
-      String program = request.getParameter("program");
+      //String program = request.getParameter("program");
+      String strId = request.getParameter( "id_project" );
 
-      if ( program == null || program.isEmpty()) {//no program specified - return select list for project
+      if ( !isInteger( strId )) {//no project specified - return select list for project
           Collection<Project> listProjects = ProjectHome.getProjectsList();
-          ReferenceList refListProjects = new ReferenceList();
+          ReferenceList refListProjects = new ReferenceList( );
           for (Project project : listProjects) {
-              if (project.canAdd()) {
-                  refListProjects.addItem(project.getId(), project.getName());
+              if ( project.canAdd( ) ) {
+                  refListProjects.addItem( project.getId( ), project.getName( ) );
               }
           }
-          model.put(MARK_LIST_PROJECTS, refListProjects);
-          return getXPage(TEMPLATE_CREATE_ENROLLMENT, request.getLocale(  ), model);
-      }else {//program specified; return form if it can add, else return information about project
-          Project project = ProjectHome.findByName(program);
-          if (project != null && project.canAdd()) {
-              model.put("program", program);
-              return getXPage(TEMPLATE_CREATE_ENROLLMENT, request.getLocale(  ), model);
+          model.put( MARK_LIST_PROJECTS, refListProjects );
+          return getXPage( TEMPLATE_CREATE_ENROLLMENT, request.getLocale(  ), model );
+      } else {//program specified; return form if it can add, else return information about project
+          Project project = ProjectHome.findByPrimaryKey( Integer.parseInt ( strId ) );
+          if ( project != null && project.canAdd( ) ) {
+              model.put( "program", project.getName( ) );
+              return getXPage( TEMPLATE_CREATE_ENROLLMENT, request.getLocale(  ), model );
           } else {
-              if (project == null ) {
-                  model.put("invalid", true);
+              if ( project == null ) {
+                  model.put( "invalid", true);
               } else {
-                  model.put("inactive", project.getActive() == 0);
-                  model.put("full", project.atCapacity());
+                  model.put( "inactive", project.getActive() == 0);
+                  model.put( "full", project.atCapacity( ) );
               }
-              return getXPage(TEMPLATE_PROJECT_STATUS, request.getLocale(  ), model);
+              return getXPage( TEMPLATE_PROJECT_STATUS, request.getLocale(  ), model );
           }
 
       }
+  }
+
+    /**
+     *  a convenience method
+     * @param strNumber the string hopefully representing an integer
+     * @return whether the string represents an integer
+     */
+  private static boolean isInteger( String strNumber ) {
+      if ( strNumber == null ) { return false; }
+      try {
+          int num = Integer.parseInt( strNumber );
+      } catch ( NumberFormatException e ) {
+          return false;
+      }
+    return true;
   }
 }

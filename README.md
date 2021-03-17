@@ -10,7 +10,7 @@ the Lutece site's `pom` file.
 ## Test
 
 To run the tests, we need to spin up a mysql instance in a docker container.  To do this, in the top level directory for 
-this plugin, run `docker-compse up` . Then, execute the following command: 
+this plugin, run `docker-compose up` . Then, execute the following command: 
 mvn clean lutece:exploded antrun:run test \
 -Dlutece-test-mysql \
 -Dlutece-antrun-db-user=lutece \
