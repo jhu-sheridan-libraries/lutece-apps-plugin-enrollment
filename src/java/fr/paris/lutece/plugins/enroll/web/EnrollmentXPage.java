@@ -110,10 +110,9 @@ public class EnrollmentXPage extends MVCApplication {
   {
 
       Map<String, Object> model = new HashMap<>( );
-      //String program = request.getParameter("program");
       String strId = request.getParameter( "id_project" );
 
-      if ( !isInteger( strId )) {//no project specified - return select list for project
+      if ( !isInteger( strId ) ) {//no project specified - return select list for project
           Collection<Project> listProjects = ProjectHome.getProjectsList();
           ReferenceList refListProjects = new ReferenceList( );
           for (Project project : listProjects) {

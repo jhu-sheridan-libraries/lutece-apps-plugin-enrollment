@@ -10,7 +10,7 @@
             <@staticText> ${program} </@staticText>
             <input type="hidden" id="program" name="program" value="${program}"/>
         <#else>
-            <select class="form-control" id="program-form" name="program-form">
+            <select class="form-control" id="program-form" name="program">
                 <#list refListProjects as item>
                 <option value="${item.name}" >${item.name}</option>
                 </#list>
