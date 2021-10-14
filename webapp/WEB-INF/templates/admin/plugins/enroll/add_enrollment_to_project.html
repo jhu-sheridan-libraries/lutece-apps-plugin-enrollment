@@ -1,16 +1,14 @@
-<#include "manageenroll_tabs.html" />
-<@tabs tab="enrollment" />
 
-<@boxHeader i18nTitleKey="enroll.modify_enrollment.title"/>
 <@messages infos=infos warnings=warnings  errors=errors />
 <@tform class="form-horizontal" method="post" name="modify_enrollment" action="jsp/admin/plugins/enroll/ManageEnrollments.jsp">
     <input type="hidden" id="projectId" name="projectId" value="${project.id}"/>
     <input type="hidden" id="program" name="program" value="${project.name}"/>
+
+    <@formGroup labelKey='#i18n{enroll.modify_enrollment.labelProgram}'>
+        <span>${project.name}</span>
+    </@formGroup>
     <@formGroup labelFor="name" labelKey='#i18n{enroll.modify_enrollment.labelName}' helpKey='#i18n{enroll.modify_enrollment.labelName.help}' mandatory=true>
         <@input type='text' name='name' maxlength=50 />
-    </@formGroup>
-    <@formGroup labelKey='#i18n{enroll.modify_enrollment.labelProgram}'>
-        <@staticText> ${project.name} </@staticText>
     </@formGroup>
     <@formGroup labelFor="email" labelKey='#i18n{enroll.modify_enrollment.labelEmail}' helpKey='#i18n{enroll.modify_enrollment.labelEmail.help}' mandatory=true>
         <@input type='email' name='email' maxlength=50 />
