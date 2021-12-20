@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.enroll.business.portlet;
 
 import fr.paris.lutece.plugins.enroll.web.EnrollmentXPage;
 import fr.paris.lutece.portal.business.portlet.PortletHtmlContent;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
