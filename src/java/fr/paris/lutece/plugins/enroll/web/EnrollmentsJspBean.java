@@ -274,7 +274,7 @@ public class EnrollmentsJspBean extends ManageEnrollJspBean
         if ( project.canAdd()) {
             project.setCurrentSize(project.getCurrentSize() + 1);
             ProjectHome.update(project);
-            EnrollmentHome.create(enrollment);
+            EnrollmentHome.create(_enrollment);
             addInfo(INFO_ENROLLMENT_CREATED, getLocale());
             addInfo(INFO_PROJECT_UPDATED, getLocale());
             } else {
