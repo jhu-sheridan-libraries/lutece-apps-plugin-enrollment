@@ -1,4 +1,4 @@
-# lutece-enroll-plugin [plugin-enroll]
+# Enrollment Plugin
 
 ## Use
 
